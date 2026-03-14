@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
@@ -16,7 +17,6 @@
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <style>
-/* ── Design tokens ─────────────────────────────────────────── */
 :root {
   --brand: #3d6b9e; --brand-h: #4a7ab5;
   --brand-bg: rgba(61,107,158,.08); --brand-bd: rgba(61,107,158,.2);
@@ -26,588 +26,289 @@
   --green: #3fb950; --green-bg: rgba(63,185,80,.15); --green-bd: rgba(63,185,80,.3);
   --yellow: #d29922; --yellow-bg: rgba(187,128,9,.15); --yellow-bd: rgba(187,128,9,.3); --yt: #e3b341;
   --red: #f85149;
-  --sh-sm: 0 0 0 1px rgba(240,246,252,.1);
-  --sh-md: 0 3px 6px rgba(0,0,0,.4);
-  --sh-lg: 0 8px 24px rgba(0,0,0,.5);
+  --sh-sm: 0 0 0 1px rgba(240,246,252,.1); --sh-md: 0 3px 6px rgba(0,0,0,.4); --sh-lg: 0 8px 24px rgba(0,0,0,.5);
   --r-sm: 6px; --r-md: 8px; --r-lg: 12px;
   --font: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Noto Sans', Helvetica, Arial, sans-serif;
 }
 html[data-theme="light"] {
   --bg0: #fff; --bg1: #f6f8fa; --bg2: #eaeef2; --bg3: #d0d7de;
-  --bd: #d0d7de; --bd-s: #eaeef2;
-  --t0: #1f2328; --t1: #656d76; --t2: #9198a1;
-  --brand: #0550ae; --brand-h: #0440a0;
-  --brand-bg: rgba(5,80,174,.06); --brand-bd: rgba(5,80,174,.15); --tl: #0550ae;
+  --bd: #d0d7de; --bd-s: #eaeef2; --t0: #1f2328; --t1: #656d76; --t2: #9198a1;
+  --brand: #0550ae; --brand-h: #0440a0; --brand-bg: rgba(5,80,174,.06); --brand-bd: rgba(5,80,174,.15); --tl: #0550ae;
   --green: #1a7f37; --green-bg: rgba(26,127,55,.1); --green-bd: rgba(26,127,55,.25);
   --yt: #9a6700; --yellow-bg: rgba(154,103,0,.1); --yellow-bd: rgba(154,103,0,.25);
   --sh-sm: 0 1px 3px rgba(31,35,40,.12); --sh-md: 0 3px 6px rgba(31,35,40,.15); --sh-lg: 0 8px 24px rgba(31,35,40,.15);
 }
-
-/* ── Reset ─────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
 input[type="number"] { -moz-appearance: textfield; }
 body, * { -ms-overflow-style: none; scrollbar-width: none; }
 ::-webkit-scrollbar { display: none; }
-body {
-  font-family: var(--font);
-  background: var(--bg0);
-  color: var(--t0);
-  overscroll-behavior-y: none;
-  -webkit-tap-highlight-color: transparent;
-  min-height: 100vh;
-}
+body { font-family: var(--font); background: var(--bg0); color: var(--t0); overscroll-behavior-y: none; -webkit-tap-highlight-color: transparent; min-height: 100vh; }
 button, input { -webkit-tap-highlight-color: transparent; }
 button:focus, input:focus, :focus-visible { outline: none; }
 svg { display: inline-block; vertical-align: middle; }
 
-/* ── Transitions: opt-in only ──────────────────────────────── */
-.gh-card, .drop-hero, .drawer-card,
-.denom-row, .step-btn, .roll-btn, .breakdown-btn,
-.gh-header, body, .sticky-footer,
-.toggle-track, .toggle-thumb,
-.progress-fill, .footer-total-value {
-  transition-property: background, border-color, box-shadow, color;
-  transition-duration: .2s;
-  transition-timing-function: ease;
+.gh-card, .drop-hero, .drawer-card, .denom-row-wrap, .step-btn, .roll-btn, .breakdown-btn,
+.gh-header, body, .sticky-footer, .toggle-track, .toggle-thumb, .progress-fill, .footer-total-value {
+transition-property: background, border-color, box-shadow, color;
+transition-duration: .2s; transition-timing-function: ease;
 }
-.progress-fill { transition-property: width, background; transition-duration: .6s, .3s; }
-.progress-fill { transition-timing-function: cubic-bezier(.4,0,.2,1), ease; }
+.progress-fill { transition-property: width, background; transition-duration: .6s, .3s; transition-timing-function: cubic-bezier(.4,0,.2,1), ease; }
 
-/* ── Header ────────────────────────────────────────────────── */
-.gh-header {
-  background: var(--bg1);
-  border-bottom: 1px solid var(--bd);
-  padding: 12px 18px;
-  padding-top: calc(12px + env(safe-area-inset-top));
-  display: flex; align-items: center; justify-content: space-between;
-  position: sticky; top: 0; z-index: 30;
-}
-body::before {
-  content: ''; position: fixed; top: 0; left: 0; right: 0;
-  height: env(safe-area-inset-top);
-  background: var(--bg1); z-index: 31;
-}
+/* Header */
+.gh-header { background: var(–bg1); border-bottom: 1px solid var(–bd); padding: 12px 18px; padding-top: calc(12px + env(safe-area-inset-top)); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 30; }
+body::before { content: ‘’; position: fixed; top: 0; left: 0; right: 0; height: env(safe-area-inset-top); background: var(–bg1); z-index: 31; }
 .gh-header-brand { display: flex; align-items: center; gap: 12px; }
-.gh-logo {
-  width: 36px; height: 36px; background: var(--brand);
-  border-radius: var(--r-md); display: flex; align-items: center;
-  justify-content: center; color: #fff; flex-shrink: 0;
-}
-.gh-header-title { font-size: 17px; font-weight: 700; color: var(--t0); }
+.gh-logo { width: 36px; height: 36px; background: var(–brand); border-radius: var(–r-md); display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; }
+.gh-header-title { font-size: 17px; font-weight: 700; color: var(–t0); }
 .gh-header-actions { display: flex; gap: 10px; }
 
-/* ── Icon buttons ──────────────────────────────────────────── */
-.icon-btn {
-  width: 44px; height: 44px;
-  background: var(--bg2); border: 1px solid var(--bd);
-  border-radius: var(--r-sm); display: flex;
-  align-items: center; justify-content: center;
-  cursor: pointer; color: var(--t1);
-  transition: background .15s, color .15s; font-size: 0;
-}
-.icon-btn:hover { background: var(--bg3); color: var(--t0); }
+/* Icon buttons */
+.icon-btn { width: 44px; height: 44px; background: var(–bg2); border: 1px solid var(–bd); border-radius: var(–r-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(–t1); transition: background .15s, color .15s; font-size: 0; }
+.icon-btn:hover { background: var(–bg3); color: var(–t0); }
 .icon-btn:active { transform: scale(.93); transition: transform 0s; }
 
-/* ── Primary button ────────────────────────────────────────── */
-.btn-primary {
-  background: #238636; border: 1px solid rgba(63,185,80,.4);
-  color: #fff; font-size: 16px; font-weight: 600;
-  padding: 0 22px; height: 50px; border-radius: var(--r-md);
-  cursor: pointer; display: flex; align-items: center; gap: 8px;
-  transition: background .15s, box-shadow .15s; white-space: nowrap;
-}
+/* Primary button */
+.btn-primary { background: #238636; border: 1px solid rgba(63,185,80,.4); color: #fff; font-size: 16px; font-weight: 600; padding: 0 22px; height: 50px; border-radius: var(–r-md); cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background .15s, box-shadow .15s; white-space: nowrap; }
 .btn-primary:hover { background: #2ea043; box-shadow: 0 0 0 3px rgba(35,134,54,.3); }
 .btn-primary:active { transform: scale(.97); transition: transform 0s; }
-html[data-theme="light"] .btn-primary { background: #1f883d; border-color: rgba(31,136,61,.4); }
-html[data-theme="light"] .btn-primary:hover { background: #1a7f37; box-shadow: 0 0 0 3px rgba(31,136,61,.25); }
+html[data-theme=“light”] .btn-primary { background: #1f883d; border-color: rgba(31,136,61,.4); }
+html[data-theme=“light”] .btn-primary:hover { background: #1a7f37; box-shadow: 0 0 0 3px rgba(31,136,61,.25); }
 
-/* ── Cards ─────────────────────────────────────────────────── */
-.gh-card {
-  background: var(--bg1); border: 1px solid var(--bd);
-  border-radius: var(--r-lg); overflow: hidden;
-}
-.gh-card-header {
-  background: var(--bg2); border-bottom: 1px solid var(--bd);
-  padding: 13px 16px; display: flex;
-  align-items: center; justify-content: space-between;
-}
-.section-label {
-  font-size: 14px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: .7px; color: var(--t1);
-}
-.badge {
-  font-size: 13px; font-weight: 700; background: var(--bg0);
-  border: 1px solid var(--bd); border-radius: 20px;
-  padding: 3px 10px; color: var(--t1); font-variant-numeric: tabular-nums;
-}
+/* Cards */
+.gh-card { background: var(–bg1); border: 1px solid var(–bd); border-radius: var(–r-lg); overflow: hidden; }
+.gh-card-header { background: var(–bg2); border-bottom: 1px solid var(–bd); padding: 13px 16px; display: flex; align-items: center; justify-content: space-between; }
+.section-label { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; color: var(–t1); }
+.badge { font-size: 13px; font-weight: 700; background: var(–bg0); border: 1px solid var(–bd); border-radius: 20px; padding: 3px 10px; color: var(–t1); font-variant-numeric: tabular-nums; }
 
-/* ── Mode toggle ───────────────────────────────────────────── */
-.mode-toggle {
-  display: flex; background: var(--bg0);
-  border: 1px solid var(--bd); border-radius: var(--r-sm); padding: 3px;
-}
-.mode-btn {
-  padding: 6px 14px; font-size: 12px; font-weight: 700;
-  border-radius: 5px; cursor: pointer;
-  color: var(--t1); border: none; background: transparent;
-  min-height: 32px; transition: background .15s, color .15s;
-}
-.mode-btn.active {
-  background: var(--bg2); color: var(--t0); box-shadow: var(--sh-sm);
-}
+/* Mode toggle */
+.mode-toggle { display: flex; background: var(–bg0); border: 1px solid var(–bd); border-radius: var(–r-sm); padding: 3px; }
+.mode-btn { padding: 6px 14px; font-size: 12px; font-weight: 700; border-radius: 5px; cursor: pointer; color: var(–t1); border: none; background: transparent; min-height: 32px; transition: background .15s, color .15s; }
+.mode-btn.active { background: var(–bg2); color: var(–t0); box-shadow: var(–sh-sm); }
 
-/* ── Denom rows ────────────────────────────────────────────── */
-.denom-row {
-  display: flex; align-items: center; gap: 10px;
-  padding: 8px 12px; border-radius: var(--r-md); min-height: 58px;
+/* ── Denom row wrapper — NEW layout ── */
+.denom-row-wrap { border-radius: var(–r-md); overflow: hidden; }
+.denom-row-wrap.has-value { background: var(–green-bg); outline: 1px solid var(–green-bd); }
+.denom-row-wrap:not(.has-value):hover { background: var(–bg2); }
+
+/* Input row */
+.denom-row { display: flex; align-items: center; gap: 10px; padding: 8px 12px; min-height: 52px; }
+
+/* ── Subtotal row — shown BELOW input ── */
+.denom-sub-row {
+display: flex; align-items: center; gap: 8px;
+padding: 2px 12px 8px 68px; /* left-indent aligns under the input */
 }
-.denom-row.has-value { background: var(--green-bg); outline: 1px solid var(--green-bd); }
-.denom-row:not(.has-value):hover { background: var(--bg2); }
-.denom-label {
-  width: 44px; text-align: center; font-size: 15px;
-  font-weight: 800; color: var(--t1); flex-shrink: 0;
+.denom-sub-item {
+display: flex; align-items: center; gap: 4px;
 }
-.denom-label.active { color: var(--green); }
+.denom-sub-badge {
+font-size: 11px; font-weight: 700;
+padding: 2px 7px; border-radius: 99px;
+font-variant-numeric: tabular-nums; letter-spacing: .1px;
+}
+.denom-sub-badge.dollar {
+background: var(–green-bg); border: 1px solid var(–green-bd); color: var(–green);
+}
+.denom-sub-badge.count {
+background: var(–brand-bg); border: 1px solid var(–brand-bd); color: var(–brand);
+}
+.denom-sub-sep { font-size: 10px; color: var(–t2); font-weight: 600; }
+
+.denom-label { width: 44px; text-align: center; font-size: 15px; font-weight: 800; color: var(–t1); flex-shrink: 0; }
+.denom-label.active { color: var(–green); }
 .denom-input-wrap { position: relative; flex: 1; min-width: 0; }
-.denom-prefix {
-  position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
-  font-size: 15px; font-weight: 600; color: var(--t2);
-  pointer-events: none; user-select: none;
-}
-.denom-input {
-  width: 100%; background: var(--bg0); border: 1px solid var(--bd);
-  border-radius: var(--r-sm); height: 44px; padding: 0 58px 0 12px;
-  font-size: 17px; font-weight: 700; color: var(--t0);
-  font-variant-numeric: tabular-nums;
-  transition: border-color .15s, background .15s;
-}
+.denom-prefix { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: 15px; font-weight: 600; color: var(–t2); pointer-events: none; user-select: none; }
+.denom-input { width: 100%; background: var(–bg0); border: 1px solid var(–bd); border-radius: var(–r-sm); height: 44px; padding: 0 12px; font-size: 17px; font-weight: 700; color: var(–t0); font-variant-numeric: tabular-nums; transition: border-color .15s, background .15s; }
 .denom-input.has-prefix { padding-left: 28px; }
-.denom-input:focus { border-color: var(--bg3); background: var(--bg1); }
-.denom-input::placeholder { color: var(--t2); font-weight: 400; }
-.row-sub {
-  position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
-  font-size: 10px; font-weight: 600; color: var(--t2);
-  pointer-events: none; user-select: none; font-variant-numeric: tabular-nums;
-  letter-spacing: .1px; max-width: 52px; overflow: hidden;
-  text-overflow: ellipsis; white-space: nowrap; text-align: right;
-  background: var(--bg0); padding-left: 2px;
-}
+.denom-input:focus { border-color: var(–bg3); background: var(–bg1); }
+.denom-input::placeholder { color: var(–t2); font-weight: 400; }
+
 .stepper { display: flex; gap: 6px; flex-shrink: 0; }
-.step-btn {
-  width: 44px; height: 44px; background: var(--bg2);
-  border: 1px solid var(--bd); border-radius: var(--r-sm);
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; color: var(--t1);
-}
-.step-btn:hover { background: var(--bg3); color: var(--t0); }
+.step-btn { width: 44px; height: 44px; background: var(–bg2); border: 1px solid var(–bd); border-radius: var(–r-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(–t1); }
+.step-btn:hover { background: var(–bg3); color: var(–t0); }
 .step-btn:active { transform: scale(.9); transition: transform 0s; }
-.step-btn.plus.active { border-color: var(--green-bd); color: var(--green); }
-.roll-btn {
-  height: 44px; min-width: 54px; background: var(--bg2);
-  border: 1px solid var(--bd); border-radius: var(--r-sm);
-  display: flex; flex-direction: column; align-items: center;
-  justify-content: center; gap: 2px; cursor: pointer;
-  color: var(--brand); padding: 0 8px;
-}
-.roll-btn:hover { background: var(--brand-bg); border-color: var(--brand-bd); }
+.step-btn.plus.active { border-color: var(–green-bd); color: var(–green); }
+.roll-btn { height: 44px; min-width: 54px; background: var(–bg2); border: 1px solid var(–bd); border-radius: var(–r-sm); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; cursor: pointer; color: var(–brand); padding: 0 8px; }
+.roll-btn:hover { background: var(–brand-bg); border-color: var(–brand-bd); }
 .roll-btn:active { transform: scale(.93); transition: transform 0s; }
 .roll-btn-icons { display: flex; align-items: center; gap: 2px; }
 .roll-btn-label { font-size: 9px; font-weight: 800; opacity: .75; letter-spacing: .3px; }
 
-/* ── Footer ────────────────────────────────────────────────── */
-.sticky-footer {
-  position: fixed; bottom: 0; left: 0; right: 0;
-  background: var(--bg1); border-top: 1px solid var(--bd);
-  padding: 14px 18px calc(14px + env(safe-area-inset-bottom));
-  z-index: 20; box-shadow: 0 -4px 20px rgba(0,0,0,.3);
-  transition: transform .15s ease, background .2s, border-color .2s;
-}
-html[data-theme="light"] .sticky-footer { box-shadow: 0 -4px 20px rgba(31,35,40,.12); }
+/* Footer */
+.sticky-footer { position: fixed; bottom: 0; left: 0; right: 0; background: var(–bg1); border-top: 1px solid var(–bd); padding: 14px 18px calc(14px + env(safe-area-inset-bottom)); z-index: 20; box-shadow: 0 -4px 20px rgba(0,0,0,.3); transition: transform .15s ease, background .2s, border-color .2s; }
+html[data-theme=“light”] .sticky-footer { box-shadow: 0 -4px 20px rgba(31,35,40,.12); }
 .footer-row { display: flex; align-items: center; gap: 14px; }
-.footer-total-label {
-  font-size: 11px; font-weight: 600; text-transform: uppercase;
-  letter-spacing: .7px; color: var(--t1); margin-bottom: 2px;
-}
-.footer-total-value {
-  font-size: 32px; font-weight: 800; font-variant-numeric: tabular-nums;
-  color: var(--t0); line-height: 1.1;
-}
-.footer-total-value.over { color: var(--green); }
+.footer-total-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .7px; color: var(–t1); margin-bottom: 2px; }
+.footer-total-value { font-size: 32px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(–t0); line-height: 1.1; }
+.footer-total-value.over { color: var(–green); }
 .target-row { margin-top: 12px; }
-.target-meta {
-  display: flex; justify-content: space-between;
-  align-items: center; margin-bottom: 8px;
-}
-.target-label-group {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 12px; font-weight: 600; text-transform: uppercase;
-  letter-spacing: .6px; color: var(--t1);
-}
-.target-input {
-  width: 72px; background: var(--bg0); border: 1px solid var(--bd);
-  border-radius: var(--r-sm); padding: 4px 8px;
-  text-align: center; font-size: 14px; font-weight: 700;
-  color: var(--t0); font-variant-numeric: tabular-nums; height: 34px;
-  transition: border-color .15s;
-}
-.target-input:focus { border-color: var(--bg3); }
-.target-status {
-  font-size: 12px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: .6px; font-variant-numeric: tabular-nums;
-}
-.target-status.over { color: var(--green); }
-.target-status.under { color: var(--t2); }
+.target-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.target-label-group { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .6px; color: var(–t1); }
+.target-input { width: 72px; background: var(–bg0); border: 1px solid var(–bd); border-radius: var(–r-sm); padding: 4px 8px; text-align: center; font-size: 14px; font-weight: 700; color: var(–t0); font-variant-numeric: tabular-nums; height: 34px; transition: border-color .15s; }
+.target-input:focus { border-color: var(–bg3); }
+.target-status { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; font-variant-numeric: tabular-nums; }
+.target-status.over { color: var(–green); }
+.target-status.under { color: var(–t2); }
 
-/* ── Progress bar ──────────────────────────────────────────── */
-.progress-track {
-  height: 6px; background: var(--bg3); border-radius: 99px; overflow: hidden;
-}
-.progress-fill { height: 100%; border-radius: 99px; background: var(--brand); }
-.progress-fill.over { background: var(--green); }
+/* Progress */
+.progress-track { height: 6px; background: var(–bg3); border-radius: 99px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 99px; background: var(–brand); }
+.progress-fill.over { background: var(–green); }
 .progress-flag-wrap { position: relative; height: 22px; margin-top: 3px; overflow: visible; }
-.progress-flag {
-  position: absolute; top: 0; display: flex; flex-direction: column;
-  align-items: center; transform: translateX(-50%); pointer-events: none;
-}
-.progress-flag-pole { width: 1.5px; height: 10px; background: var(--yt); opacity: .75; }
-.progress-flag-tag {
-  font-size: 9px; font-weight: 800;
-  background: var(--yellow-bg); border: 1px solid var(--yellow-bd);
-  color: var(--yt); border-radius: 3px; padding: 1px 5px;
-  white-space: nowrap; letter-spacing: .3px;
-}
+.progress-flag { position: absolute; top: 0; display: flex; flex-direction: column; align-items: center; transform: translateX(-50%); pointer-events: none; }
+.progress-flag-pole { width: 1.5px; height: 10px; background: var(–yt); opacity: .75; }
+.progress-flag-tag { font-size: 9px; font-weight: 800; background: var(–yellow-bg); border: 1px solid var(–yellow-bd); color: var(–yt); border-radius: 3px; padding: 1px 5px; white-space: nowrap; letter-spacing: .3px; }
 
-/* ── Back button ───────────────────────────────────────────── */
-.back-btn {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 14px; font-weight: 600; color: var(--t1);
-  background: none; border: none; cursor: pointer;
-  padding: 4px 0; min-height: 44px; transition: color .15s;
-}
-.back-btn:hover { color: var(--t0); }
+.back-btn { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(–t1); background: none; border: none; cursor: pointer; padding: 4px 0; min-height: 44px; transition: color .15s; }
+.back-btn:hover { color: var(–t0); }
 
-/* ── Drop result ───────────────────────────────────────────── */
-.drop-hero {
-  background: var(--bg1); border: 1px solid var(--bd);
-  border-radius: var(--r-lg); overflow: hidden;
-}
-.drop-hero-top {
-  padding: 20px 18px 16px; border-bottom: 1px solid var(--bd);
-  background: var(--bg2);
-}
-.drop-eyebrow {
-  font-size: 10px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: .8px; color: var(--t1); margin-bottom: 6px;
-}
-.drop-amount {
-  font-size: 48px; font-weight: 800; line-height: 1;
-  color: var(--t0); font-variant-numeric: tabular-nums; letter-spacing: -1px;
-}
-.drop-sub { font-size: 12px; color: var(--t1); margin-top: 6px; font-variant-numeric: tabular-nums; }
-.pull-label {
-  font-size: 10px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: .7px; color: var(--t1); margin-bottom: 10px;
-}
-.pull-row {
-  display: flex; align-items: center; justify-content: space-between;
-  background: var(--bg0); border: 1px solid var(--bd);
-  border-radius: var(--r-sm); padding: 10px 14px; min-height: 52px;
-}
+/* Drop result */
+.drop-hero { background: var(–bg1); border: 1px solid var(–bd); border-radius: var(–r-lg); overflow: hidden; }
+.drop-hero-top { padding: 20px 18px 16px; border-bottom: 1px solid var(–bd); background: var(–bg2); }
+.drop-eyebrow { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(–t1); margin-bottom: 6px; }
+.drop-amount { font-size: 48px; font-weight: 800; line-height: 1; color: var(–t0); font-variant-numeric: tabular-nums; letter-spacing: -1px; }
+.drop-sub { font-size: 12px; color: var(–t1); margin-top: 6px; font-variant-numeric: tabular-nums; }
+.pull-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; color: var(–t1); margin-bottom: 10px; }
+.pull-row { display: flex; align-items: center; justify-content: space-between; background: var(–bg0); border: 1px solid var(–bd); border-radius: var(–r-sm); padding: 10px 14px; min-height: 52px; }
 .pull-row-left { display: flex; align-items: center; gap: 10px; }
-.pull-count {
-  width: 32px; height: 32px; background: var(--green-bg);
-  border: 1px solid var(--green-bd); border-radius: var(--r-sm);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 800; color: var(--green);
-}
-.pull-denom { font-size: 22px; font-weight: 800; color: var(--t0); }
-.pull-value { font-size: 18px; font-weight: 800; color: var(--green); font-variant-numeric: tabular-nums; }
+.pull-count { width: 32px; height: 32px; background: var(–green-bg); border: 1px solid var(–green-bd); border-radius: var(–r-sm); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(–green); }
+.pull-denom { font-size: 22px; font-weight: 800; color: var(–t0); }
+.pull-value { font-size: 18px; font-weight: 800; color: var(–green); font-variant-numeric: tabular-nums; }
 
-/* ── Empty state ───────────────────────────────────────────── */
-.empty-state {
-  text-align: center; padding: 32px 16px;
-  background: var(--bg0); border: 1px solid var(--bd); border-radius: var(--r-sm);
-}
-.empty-icon {
-  width: 44px; height: 44px; border-radius: 50%;
-  background: var(--green-bg); border: 1px solid var(--green-bd);
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 12px; color: var(--green);
-}
+.empty-state { text-align: center; padding: 32px 16px; background: var(–bg0); border: 1px solid var(–bd); border-radius: var(–r-sm); }
+.empty-icon { width: 44px; height: 44px; border-radius: 50%; background: var(–green-bg); border: 1px solid var(–green-bd); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; color: var(–green); }
 
-/* ── Warning banner ────────────────────────────────────────── */
-.warn-banner {
-  display: flex; gap: 12px; align-items: flex-start;
-  background: var(--yellow-bg); border: 1px solid var(--yellow-bd);
-  border-radius: var(--r-sm); padding: 14px 16px; margin-top: 10px;
-}
-.warn-dot {
-  width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; margin-top: 1px;
-  background: rgba(210,153,34,.2); border: 1px solid var(--yellow-bd);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 900; color: var(--yt);
-}
-.warn-title { font-size: 14px; font-weight: 700; color: var(--yt); }
-.warn-body { font-size: 12px; color: var(--yt); opacity: .7; margin-top: 3px; }
+.warn-banner { display: flex; gap: 12px; align-items: flex-start; background: var(–yellow-bg); border: 1px solid var(–yellow-bd); border-radius: var(–r-sm); padding: 14px 16px; margin-top: 10px; }
+.warn-dot { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; margin-top: 1px; background: rgba(210,153,34,.2); border: 1px solid var(–yellow-bd); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; color: var(–yt); }
+.warn-title { font-size: 14px; font-weight: 700; color: var(–yt); }
+.warn-body { font-size: 12px; color: var(–yt); opacity: .7; margin-top: 3px; }
 
-/* ── Drawer breakdown ──────────────────────────────────────── */
-.drawer-card {
-  background: var(--bg1); border: 1px solid var(--bd);
-  border-radius: var(--r-lg); overflow: hidden;
-}
-.drawer-header {
-  background: var(--bg2); border-bottom: 1px solid var(--bd);
-  padding: 14px 18px; display: flex; align-items: center; justify-content: space-between;
-}
-.drawer-total { font-size: 32px; font-weight: 800; color: var(--t0); font-variant-numeric: tabular-nums; line-height: 1; }
-.breakdown-btn {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px;
-  color: var(--t1); background: var(--bg1); border: 1px solid var(--bd);
-  border-radius: var(--r-sm); padding: 8px 14px; min-height: 44px; cursor: pointer;
-  transition: background .15s, color .15s;
-}
-.breakdown-btn:hover { background: var(--bg3); color: var(--t0); }
+/* Drawer breakdown */
+.drawer-card { background: var(–bg1); border: 1px solid var(–bd); border-radius: var(–r-lg); overflow: hidden; }
+.drawer-header { background: var(–bg2); border-bottom: 1px solid var(–bd); padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; }
+.drawer-total { font-size: 32px; font-weight: 800; color: var(–t0); font-variant-numeric: tabular-nums; line-height: 1; }
+.breakdown-btn { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(–t1); background: var(–bg1); border: 1px solid var(–bd); border-radius: var(–r-sm); padding: 8px 14px; min-height: 44px; cursor: pointer; transition: background .15s, color .15s; }
+.breakdown-btn:hover { background: var(–bg3); color: var(–t0); }
 .breakdown-btn:active { transform: scale(.95); transition: transform 0s; }
 .breakdown-body { padding: 18px 20px; }
-.breakdown-section-title {
-  font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px;
-  color: var(--t1); border-bottom: 1px solid var(--bd);
-  padding-bottom: 10px; margin-bottom: 4px;
-  display: flex; justify-content: space-between; align-items: baseline;
-}
-.breakdown-subtotal { font-weight: 700; color: var(--green); font-size: 13px; font-variant-numeric: tabular-nums; }
-.breakdown-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 12px 0; border-bottom: 1px solid var(--bd-s); min-height: 48px;
-}
+.breakdown-section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; color: var(–t1); border-bottom: 1px solid var(–bd); padding-bottom: 10px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: baseline; }
+.breakdown-subtotal { font-weight: 700; color: var(–green); font-size: 13px; font-variant-numeric: tabular-nums; }
+.breakdown-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(–bd-s); min-height: 48px; }
 .breakdown-row:last-child { border-bottom: none; }
 .breakdown-left { display: flex; align-items: center; gap: 12px; }
-.chip-bill {
-  height: 28px; min-width: 48px; padding: 0 10px;
-  background: var(--bg2); border: 1px solid var(--bd); border-radius: var(--r-sm);
-  font-size: 12px; font-weight: 700; color: var(--t1);
-  display: flex; align-items: center; justify-content: center;
-}
-.chip-coin {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--bg2); border: 1px solid var(--bd);
-  font-size: 10px; font-weight: 700; color: var(--t1);
-  display: flex; align-items: center; justify-content: center;
-}
-.breakdown-count { font-size: 13px; color: var(--t2); }
-.breakdown-val { font-size: 16px; font-weight: 800; color: var(--green); font-variant-numeric: tabular-nums; }
-.breakdown-empty { font-size: 13px; font-style: italic; color: var(--t2); text-align: center; padding: 16px 0; }
+.chip-bill { height: 28px; min-width: 48px; padding: 0 10px; background: var(–bg2); border: 1px solid var(–bd); border-radius: var(–r-sm); font-size: 12px; font-weight: 700; color: var(–t1); display: flex; align-items: center; justify-content: center; }
+.chip-coin { width: 32px; height: 32px; border-radius: 50%; background: var(–bg2); border: 1px solid var(–bd); font-size: 10px; font-weight: 700; color: var(–t1); display: flex; align-items: center; justify-content: center; }
+.breakdown-count { font-size: 13px; color: var(–t2); }
+.breakdown-val { font-size: 16px; font-weight: 800; color: var(–green); font-variant-numeric: tabular-nums; }
+.breakdown-empty { font-size: 13px; font-style: italic; color: var(–t2); text-align: center; padding: 16px 0; }
 
-/* ── Bottom sheets ─────────────────────────────────────────── */
-.sheet-backdrop {
-  position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 50;
-  display: flex; align-items: flex-end;
-  backdrop-filter: blur(4px); animation: backdropIn .2s ease;
-}
-html[data-theme="light"] .sheet-backdrop { background: rgba(0,0,0,.3); }
+/* Sheets */
+.sheet-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 50; display: flex; align-items: flex-end; backdrop-filter: blur(4px); animation: backdropIn .2s ease; }
+html[data-theme=“light”] .sheet-backdrop { background: rgba(0,0,0,.3); }
 @keyframes backdropIn { from { opacity: 0; } to { opacity: 1; } }
-.sheet {
-  background: var(--bg1); width: 100%; max-width: 480px; margin: 0 auto;
-  border-radius: 18px 18px 0 0; border: 1px solid var(--bd); border-bottom: none;
-  box-shadow: var(--sh-lg); animation: sheetUp .32s cubic-bezier(.34,1.15,.64,1);
-}
+.sheet { background: var(–bg1); width: 100%; max-width: 480px; margin: 0 auto; border-radius: 18px 18px 0 0; border: 1px solid var(–bd); border-bottom: none; box-shadow: var(–sh-lg); animation: sheetUp .32s cubic-bezier(.34,1.15,.64,1); }
 .sheet.scrollable { max-height: 82vh; display: flex; flex-direction: column; }
 @keyframes sheetUp { from { transform: translateY(100%); opacity: .6; } to { transform: translateY(0); opacity: 1; } }
 .sheet-handle { display: flex; justify-content: center; padding: 12px 0 4px; }
-.sheet-handle-bar { width: 36px; height: 4px; background: var(--bg3); border-radius: 99px; }
-.sheet-hd {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 20px 14px; border-bottom: 1px solid var(--bd);
-}
-.sheet-title {
-  font-size: 13px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: .8px; color: var(--t1);
-}
+.sheet-handle-bar { width: 36px; height: 4px; background: var(–bg3); border-radius: 99px; }
+.sheet-hd { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px 14px; border-bottom: 1px solid var(–bd); }
+.sheet-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(–t1); }
 .sheet-body { overflow-y: auto; flex: 1; }
 
-/* ── History ───────────────────────────────────────────────── */
-.history-entry { padding: 16px 20px; border-bottom: 1px solid var(--bd-s); }
-.history-entry.record {
-  background: linear-gradient(90deg, rgba(210,153,34,.06) 0%, transparent 100%);
-  border-left: 3px solid var(--yt);
-}
+/* History */
+.history-entry { padding: 16px 20px; border-bottom: 1px solid var(–bd-s); }
+.history-entry.record { background: linear-gradient(90deg, rgba(210,153,34,.06) 0%, transparent 100%); border-left: 3px solid var(–yt); }
 .history-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-.history-time { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--t2); }
-.history-target { font-size: 11px; font-weight: 700; color: var(--t2); font-variant-numeric: tabular-nums; }
-.record-badge {
-  font-size: 9px; font-weight: 800; background: var(--yellow-bg);
-  border: 1px solid var(--yellow-bd); color: var(--yt);
-  border-radius: 3px; padding: 2px 6px; letter-spacing: .3px; text-transform: uppercase;
-}
+.history-time { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(–t2); }
+.history-target { font-size: 11px; font-weight: 700; color: var(–t2); font-variant-numeric: tabular-nums; }
+.record-badge { font-size: 9px; font-weight: 800; background: var(–yellow-bg); border: 1px solid var(–yellow-bd); color: var(–yt); border-radius: 3px; padding: 2px 6px; letter-spacing: .3px; text-transform: uppercase; }
 .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
-.stat-pill { border-radius: var(--r-sm); padding: 9px 10px; text-align: center; border: 1px solid var(--bd); }
-.stat-pill.neutral { background: var(--bg2); }
-.stat-pill.green { background: var(--green-bg); border-color: var(--green-bd); }
-.stat-pill.dark { background: var(--bg0); }
-.stat-pill-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--t2); margin-bottom: 3px; }
-.stat-pill-value { font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--t0); }
-.stat-pill.green .stat-pill-value { color: var(--green); }
+.stat-pill { border-radius: var(–r-sm); padding: 9px 10px; text-align: center; border: 1px solid var(–bd); }
+.stat-pill.neutral { background: var(–bg2); }
+.stat-pill.green { background: var(–green-bg); border-color: var(–green-bd); }
+.stat-pill.dark { background: var(–bg0); }
+.stat-pill-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(–t2); margin-bottom: 3px; }
+.stat-pill-value { font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(–t0); }
+.stat-pill.green .stat-pill-value { color: var(–green); }
 .history-chips { display: flex; flex-wrap: wrap; gap: 5px; }
-.history-chip {
-  font-size: 11px; font-weight: 700; background: var(--bg2);
-  border: 1px solid var(--bd); border-radius: var(--r-sm);
-  padding: 3px 9px; color: var(--t1);
-}
-.history-empty { text-align: center; padding: 70px 20px; color: var(--t1); }
-.history-empty-icon {
-  width: 52px; height: 52px; border-radius: var(--r-md);
-  background: var(--bg2); border: 1px solid var(--bd);
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 14px; color: var(--t2);
-}
-.clear-btn {
-  font-size: 14px; font-weight: 700; color: var(--red);
-  cursor: pointer; border: none; background: none;
-  min-height: 44px; padding: 0 4px; transition: opacity .15s;
-}
+.history-chip { font-size: 11px; font-weight: 700; background: var(–bg2); border: 1px solid var(–bd); border-radius: var(–r-sm); padding: 3px 9px; color: var(–t1); }
+.history-empty { text-align: center; padding: 70px 20px; color: var(–t1); }
+.history-empty-icon { width: 52px; height: 52px; border-radius: var(–r-md); background: var(–bg2); border: 1px solid var(–bd); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; color: var(–t2); }
+.clear-btn { font-size: 14px; font-weight: 700; color: var(–red); cursor: pointer; border: none; background: none; min-height: 44px; padding: 0 4px; transition: opacity .15s; }
 .clear-btn:hover { opacity: .8; }
 
-/* ── Settings ──────────────────────────────────────────────── */
-.settings-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 16px 20px; border-bottom: 1px solid var(--bd-s);
-  min-height: 60px; transition: background .15s;
-}
+/* Settings */
+.settings-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(–bd-s); min-height: 60px; transition: background .15s; }
 .settings-row:last-child { border-bottom: none; }
-.settings-row:active { background: var(--bg2); }
-.settings-label { font-size: 15px; font-weight: 600; color: var(--t0); }
-.settings-sub { font-size: 12px; color: var(--t1); margin-top: 2px; }
-.settings-action {
-  font-size: 14px; font-weight: 600; color: var(--tl);
-  background: none; border: none; cursor: pointer;
-  min-height: 44px; padding: 0 4px; transition: opacity .15s;
-}
+.settings-row:active { background: var(–bg2); }
+.settings-label { font-size: 15px; font-weight: 600; color: var(–t0); }
+.settings-sub { font-size: 12px; color: var(–t1); margin-top: 2px; }
+.settings-action { font-size: 14px; font-weight: 600; color: var(–tl); background: none; border: none; cursor: pointer; min-height: 44px; padding: 0 4px; transition: opacity .15s; }
 .settings-action:hover { opacity: .8; }
 
-/* ── Toggle ────────────────────────────────────────────────── */
-.toggle-track {
-  width: 48px; height: 26px; border-radius: 99px;
-  cursor: pointer; border: none; padding: 3px;
-  display: flex; align-items: center; flex-shrink: 0;
-}
-.toggle-track.on { background: var(--green); justify-content: flex-end; }
-.toggle-track.off { background: var(--bg3); justify-content: flex-start; }
-.toggle-thumb {
-  width: 20px; height: 20px; background: #fff;
-  border-radius: 50%; box-shadow: 0 1px 4px rgba(0,0,0,.3);
-  transition: all .2s;
-}
+/* Toggle */
+.toggle-track { width: 48px; height: 26px; border-radius: 99px; cursor: pointer; border: none; padding: 3px; display: flex; align-items: center; flex-shrink: 0; }
+.toggle-track.on { background: var(–green); justify-content: flex-end; }
+.toggle-track.off { background: var(–bg3); justify-content: flex-start; }
+.toggle-thumb { width: 20px; height: 20px; background: #fff; border-radius: 50%; box-shadow: 0 1px 4px rgba(0,0,0,.3); transition: all .2s; }
 
-/* ── Modals ────────────────────────────────────────────────── */
-.modal-backdrop {
-  position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 200;
-  display: flex; align-items: center; justify-content: center;
-  padding: 24px; backdrop-filter: blur(6px); animation: backdropIn .2s ease;
-}
-.modal-card {
-  background: var(--bg1); border: 1px solid var(--bd);
-  border-radius: var(--r-lg); padding: 28px 24px;
-  width: 100%; max-width: 320px;
-  box-shadow: var(--sh-lg); animation: slideUp .3s cubic-bezier(.34,1.3,.64,1);
-}
+/* Modals */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 24px; backdrop-filter: blur(6px); animation: backdropIn .2s ease; }
+.modal-card { background: var(–bg1); border: 1px solid var(–bd); border-radius: var(–r-lg); padding: 28px 24px; width: 100%; max-width: 320px; box-shadow: var(–sh-lg); animation: slideUp .3s cubic-bezier(.34,1.3,.64,1); }
 @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-.modal-title { font-size: 17px; font-weight: 800; color: var(--t0); margin-bottom: 8px; text-align: center; }
-.modal-body { font-size: 13px; color: var(--t1); line-height: 1.6; text-align: center; margin-bottom: 22px; }
+.modal-title { font-size: 17px; font-weight: 800; color: var(–t0); margin-bottom: 8px; text-align: center; }
+.modal-body { font-size: 13px; color: var(–t1); line-height: 1.6; text-align: center; margin-bottom: 22px; }
 .modal-actions { display: flex; flex-direction: column; gap: 8px; }
-.modal-btn {
-  width: 100%; height: 46px; border-radius: var(--r-md);
-  font-size: 15px; font-weight: 700; cursor: pointer;
-  border: 1px solid var(--bd); transition: opacity .15s, transform .15s;
-}
-.modal-btn.danger { background: var(--red); border-color: transparent; color: #fff; }
+.modal-btn { width: 100%; height: 46px; border-radius: var(–r-md); font-size: 15px; font-weight: 700; cursor: pointer; border: 1px solid var(–bd); transition: opacity .15s, transform .15s; }
+.modal-btn.danger { background: var(–red); border-color: transparent; color: #fff; }
 .modal-btn.danger:hover { opacity: .88; }
-.modal-btn.cancel { background: var(--bg2); color: var(--t1); }
-.modal-btn.cancel:hover { background: var(--bg3); color: var(--t0); }
+.modal-btn.cancel { background: var(–bg2); color: var(–t1); }
+.modal-btn.cancel:hover { background: var(–bg3); color: var(–t0); }
 .modal-btn:active { transform: scale(.97); }
+.about-logo { width: 64px; height: 64px; background: var(–brand); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #fff; margin: 0 auto 14px; box-shadow: 0 6px 20px rgba(61,107,158,.35); }
+.about-tagline { font-size: 15px; font-style: italic; color: var(–brand); font-weight: 600; margin-bottom: 6px; text-align: center; }
+.about-credit { font-size: 13px; color: var(–t1); text-align: center; line-height: 1.6; }
 
-/* ── About modal ───────────────────────────────────────────── */
-.about-logo {
-  width: 64px; height: 64px; background: var(--brand);
-  border-radius: 16px; display: flex; align-items: center;
-  justify-content: center; color: #fff; margin: 0 auto 14px;
-  box-shadow: 0 6px 20px rgba(61,107,158,.35);
-}
-.about-tagline { font-size: 15px; font-style: italic; color: var(--brand); font-weight: 600; margin-bottom: 6px; text-align: center; }
-.about-credit { font-size: 13px; color: var(--t1); text-align: center; line-height: 1.6; }
-
-/* ── New record overlay ────────────────────────────────────── */
-.record-overlay {
-  position: fixed; inset: 0; z-index: 200;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(0,0,0,.6); backdrop-filter: blur(6px);
-  animation: backdropIn .3s ease;
-}
-.record-card {
-  background: var(--bg1); border: 1px solid var(--yellow-bd);
-  border-radius: 20px; padding: 32px 28px; text-align: center;
-  max-width: 300px; width: 90%;
-  box-shadow: 0 20px 60px rgba(0,0,0,.6), 0 0 40px rgba(210,153,34,.15);
-  animation: slideUp .35s cubic-bezier(.34,1.56,.64,1);
-}
-.record-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--yt); margin-bottom: 8px; }
-.record-amount { font-size: 44px; font-weight: 900; color: var(--t0); font-variant-numeric: tabular-nums; letter-spacing: -1px; line-height: 1; }
-.record-sub { font-size: 13px; color: var(--t1); margin-top: 6px; }
-.record-dismiss {
-  margin-top: 24px; background: var(--yellow-bg); border: 1px solid var(--yellow-bd);
-  color: var(--yt); font-size: 14px; font-weight: 700;
-  padding: 12px 28px; border-radius: var(--r-md); cursor: pointer;
-  transition: background .15s; width: 100%;
-}
+/* Record overlay */
+.record-overlay { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,.6); backdrop-filter: blur(6px); animation: backdropIn .3s ease; }
+.record-card { background: var(–bg1); border: 1px solid var(–yellow-bd); border-radius: 20px; padding: 32px 28px; text-align: center; max-width: 300px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,.6), 0 0 40px rgba(210,153,34,.15); animation: slideUp .35s cubic-bezier(.34,1.56,.64,1); }
+.record-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(–yt); margin-bottom: 8px; }
+.record-amount { font-size: 44px; font-weight: 900; color: var(–t0); font-variant-numeric: tabular-nums; letter-spacing: -1px; line-height: 1; }
+.record-sub { font-size: 13px; color: var(–t1); margin-top: 6px; }
+.record-dismiss { margin-top: 24px; background: var(–yellow-bg); border: 1px solid var(–yellow-bd); color: var(–yt); font-size: 14px; font-weight: 700; padding: 12px 28px; border-radius: var(–r-md); cursor: pointer; transition: background .15s; width: 100%; }
 .record-dismiss:hover { background: rgba(210,153,34,.25); }
 
-/* ── Tutorial ──────────────────────────────────────────────── */
+/* Tutorial */
 .tutorial-svg { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: all; }
-.tutorial-card {
-  position: fixed; left: 50%; transform: translateX(-50%);
-  background: var(--bg1); border: 1px solid var(--bd);
-  border-radius: var(--r-lg); padding: 20px;
-  width: min(320px, calc(100vw - 32px));
-  box-shadow: 0 8px 32px rgba(0,0,0,.5), 0 0 0 1px rgba(61,107,158,.2);
-  z-index: 101; pointer-events: all;
-  animation: tutCardIn .3s cubic-bezier(.34,1.2,.64,1);
-}
+.tutorial-card { position: fixed; left: 50%; transform: translateX(-50%); background: var(–bg1); border: 1px solid var(–bd); border-radius: var(–r-lg); padding: 20px; width: min(320px, calc(100vw - 32px)); box-shadow: 0 8px 32px rgba(0,0,0,.5), 0 0 0 1px rgba(61,107,158,.2); z-index: 101; pointer-events: all; animation: tutCardIn .3s cubic-bezier(.34,1.2,.64,1); }
 @keyframes tutCardIn { from { opacity: 0; transform: translateX(-50%) translateY(12px) scale(.97); } to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); } }
-.tut-step-num { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .8px; color: var(--brand); margin-bottom: 6px; }
-.tut-title { font-size: 16px; font-weight: 700; color: var(--t0); margin-bottom: 6px; }
-.tut-body { font-size: 13px; color: var(--t1); line-height: 1.6; }
+.tut-step-num { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .8px; color: var(–brand); margin-bottom: 6px; }
+.tut-title { font-size: 16px; font-weight: 700; color: var(–t0); margin-bottom: 6px; }
+.tut-body { font-size: 13px; color: var(–t1); line-height: 1.6; }
 .tut-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; gap: 8px; }
-.tut-btn {
-  height: 36px; border-radius: var(--r-sm); font-size: 13px; font-weight: 700;
-  cursor: pointer; padding: 0 16px; transition: background .15s; border: 1px solid var(--bd);
-}
-.tut-btn.primary { background: var(--brand); color: #fff; border-color: transparent; }
-.tut-btn.primary:hover { background: var(--brand-h); }
-.tut-btn.secondary { background: var(--bg2); color: var(--t1); }
-.tut-btn.secondary:hover { background: var(--bg3); }
-.tut-skip { font-size: 12px; color: var(--t2); cursor: pointer; background: none; border: none; padding: 4px; min-height: 36px; }
-.tut-skip:hover { color: var(--t1); }
+.tut-btn { height: 36px; border-radius: var(–r-sm); font-size: 13px; font-weight: 700; cursor: pointer; padding: 0 16px; transition: background .15s; border: 1px solid var(–bd); }
+.tut-btn.primary { background: var(–brand); color: #fff; border-color: transparent; }
+.tut-btn.primary:hover { background: var(–brand-h); }
+.tut-btn.secondary { background: var(–bg2); color: var(–t1); }
+.tut-btn.secondary:hover { background: var(–bg3); }
+.tut-skip { font-size: 12px; color: var(–t2); cursor: pointer; background: none; border: none; padding: 4px; min-height: 36px; }
+.tut-skip:hover { color: var(–t1); }
 .tut-dots { display: flex; gap: 5px; align-items: center; }
-.tut-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--bg3); transition: all .25s cubic-bezier(.34,1.4,.64,1);
-}
-.tut-dot.active { background: var(--brand); width: 20px; border-radius: 3px; }
+.tut-dot { width: 6px; height: 6px; border-radius: 50%; background: var(–bg3); transition: all .25s cubic-bezier(.34,1.4,.64,1); }
+.tut-dot.active { background: var(–brand); width: 20px; border-radius: 3px; }
 
-/* ── Layout ────────────────────────────────────────────────── */
+/* Layout */
 .main-content { max-width: 480px; margin: 0 auto; padding: 16px 16px 220px; }
 .section-body { padding: 10px; display: flex; flex-direction: column; gap: 5px; }
-.hold-hint { text-align: center; font-size: 12px; color: var(--t2); padding-bottom: 4px; letter-spacing: .3px; }
+.hold-hint { text-align: center; font-size: 12px; color: var(–t2); padding-bottom: 4px; letter-spacing: .3px; }
 
-/* ── Bump animation ────────────────────────────────────────── */
 @keyframes bump { 0% { transform: scale(1); } 40% { transform: scale(1.06); } 100% { transform: scale(1); } }
 .bump { animation: bump .18s ease-out; }
 @keyframes spotGlow { 0%, 100% { opacity: .7; } 50% { opacity: 1; } }
-
 #confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 999; }
 </style>
+
 </head>
 <body>
 <canvas id="confetti-canvas"></canvas>
@@ -615,1285 +316,797 @@ html[data-theme="light"] .sheet-backdrop { background: rgba(0,0,0,.3); }
 <script type="text/babel">
 const { useState, useEffect, useCallback, useRef, memo } = React;
 
-// ── SVG icon primitive ─────────────────────────────────────────────────────────
-const Icon = memo(({ path, size = 16, ...props }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d={path} />
-  </svg>
+const Icon = memo(({ path, size = 16, …props }) => (
+<svg width={size} height={size} viewBox=“0 0 24 24” fill=“none”
+stroke=“currentColor” strokeWidth=“2” strokeLinecap=“round” strokeLinejoin=“round” {…props}>
+<path d={path} />
+</svg>
 ));
 
-// Icon paths as constants avoids re-creating strings each render
 const PATH = {
-  plus:     'M12 5v14M5 12h14',
-  minus:    'M5 12h14',
-  arrowR:   'M5 12h14M12 5l7 7-7 7',
-  arrowL:   'M19 12H5M12 19l-7-7 7-7',
-  refresh:  'M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16',
-  check:    'M12 22c5.52 0 10-4.48 10-10S17.52 2 12 2 2 6.48 2 12s4.48 10 10 10zM9 12l2 2 4-4',
-  coin:     'M14 2c3.31 0 6 2.69 6 6s-2.69 6-6 6M10 22c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z',
-  chevD:    'M6 9l6 6 6-6',
-  chevU:    'M18 15l-6-6-6 6',
-  clock:    'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM12 6v6l4 2',
-  history:  'M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8M3 3v5h5M12 7v5l4 2',
-  closeX:   'M18 6L6 18M6 6l12 12',
-  sun:      'M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42',
-  moon:     'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z',
-  settings: 'M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z',
-  trophy:   'M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2z',
+plus:     ‘M12 5v14M5 12h14’,
+minus:    ‘M5 12h14’,
+arrowR:   ‘M5 12h14M12 5l7 7-7 7’,
+arrowL:   ‘M19 12H5M12 19l-7-7 7-7’,
+refresh:  ‘M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16’,
+check:    ‘M12 22c5.52 0 10-4.48 10-10S17.52 2 12 2 2 6.48 2 12s4.48 10 10 10zM9 12l2 2 4-4’,
+coin:     ‘M14 2c3.31 0 6 2.69 6 6s-2.69 6-6 6M10 22c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z’,
+chevD:    ‘M6 9l6 6 6-6’,
+chevU:    ‘M18 15l-6-6-6 6’,
+clock:    ‘M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM12 6v6l4 2’,
+history:  ‘M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8M3 3v5h5M12 7v5l4 2’,
+closeX:   ‘M18 6L6 18M6 6l12 12’,
+sun:      ‘M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42’,
+moon:     ‘M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z’,
+settings: ‘M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z’,
+trophy:   ‘M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2z’,
 };
 
-// ── Domain constants ────────────────────────────────────────────────────────────
 const BILL_DENOMS = [100, 50, 20, 10, 5, 1];
 const COIN_DENOMS = [
-  { id: '1.00', label: '100¢', val: 1.00, roll: null },
-  { id: '0.50', label: '50¢',  val: 0.50, roll: null },
-  { id: '0.25', label: '25¢',  val: 0.25, roll: 40   },
-  { id: '0.10', label: '10¢',  val: 0.10, roll: 50   },
-  { id: '0.05', label: '5¢',   val: 0.05, roll: 40   },
-  { id: '0.01', label: '1¢',   val: 0.01, roll: 50   },
+{ id: ‘1.00’, label: ‘100¢’, val: 1.00, roll: null },
+{ id: ‘0.50’, label: ‘50¢’,  val: 0.50, roll: null },
+{ id: ‘0.25’, label: ‘25¢’,  val: 0.25, roll: 40   },
+{ id: ‘0.10’, label: ‘10¢’,  val: 0.10, roll: 50   },
+{ id: ‘0.05’, label: ‘5¢’,   val: 0.05, roll: 40   },
+{ id: ‘0.01’, label: ‘1¢’,   val: 0.01, roll: 50   },
 ];
-const ALL_DENOM_IDS = [
-  ...BILL_DENOMS.map(d => String(d)),
-  ...COIN_DENOMS.map(c => c.id),
-];
-const EMPTY_CASH = Object.fromEntries(ALL_DENOM_IDS.map(id => [id, '']));
+const ALL_DENOM_IDS = […BILL_DENOMS.map(d => String(d)), …COIN_DENOMS.map(c => c.id)];
+const EMPTY_CASH = Object.fromEntries(ALL_DENOM_IDS.map(id => [id, ‘’]));
 
-const LS_HISTORY  = 'ac_history_v2';
-const LS_SETTINGS = 'ac_settings_v1';
-const LS_TUTORIAL = 'ac_tutorial_v1';
-const LS_RECORD   = 'ac_record_v1';
-const LS_THEME    = 'ac_theme';
+const LS_HISTORY = ‘ac_history_v2’, LS_SETTINGS = ‘ac_settings_v1’;
+const LS_TUTORIAL = ‘ac_tutorial_v1’, LS_RECORD = ‘ac_record_v1’, LS_THEME = ‘ac_theme’;
 
-// ── Storage helpers ─────────────────────────────────────────────────────────────
 function lsGet(key, fallback) {
-  try {
-    const raw = localStorage.getItem(key);
-    return raw != null ? JSON.parse(raw) : fallback;
-  } catch {
-    return fallback;
-  }
+try { const r = localStorage.getItem(key); return r != null ? JSON.parse(r) : fallback; }
+catch { return fallback; }
 }
-function lsSet(key, value) {
-  try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* quota full */ }
-}
+function lsSet(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch {} }
 
-// ── Math helpers ────────────────────────────────────────────────────────────────
-// Avoid floating-point drift: always work in integer cents
-const toCents    = n  => Math.round(n * 100);
-const fromCents  = c  => c / 100;
+const toCents   = n => Math.round(n * 100);
+const fromCents = c => c / 100;
+
+function rowValue(rawInput, denom, mode) {
+const n = Number(rawInput) || 0;
+if (mode === ‘count’) return fromCents(Math.floor(n) * toCents(denom));
+return fromCents(Math.floor(toCents(n) / toCents(denom)) * toCents(denom));
+}
+function rowCount(rawInput, denom, mode) {
+const n = Number(rawInput) || 0;
+if (mode === ‘count’) return Math.floor(n);
+return Math.floor(toCents(n) / toCents(denom));
+}
 
 /**
- * Returns the dollar value for a row.
- * mode='count' → input is a count  → value = count × denom
- * mode='value' → input is a dollar value → value = floor-to-denom-multiple
- */
-function rowValue(rawInput, denom, mode) {
-  const n = Number(rawInput) || 0;
-  if (mode === 'count') {
-    return fromCents(Math.floor(n) * toCents(denom));
-  }
-  // value mode: snap down to nearest whole unit
-  const units = Math.floor(toCents(n) / toCents(denom));
-  return fromCents(units * toCents(denom));
-}
 
-/** Count of units in a row (for DP) */
-function rowCount(rawInput, denom, mode) {
-  const n = Number(rawInput) || 0;
-  if (mode === 'count') return Math.floor(n);
-  return Math.floor(toCents(n) / toCents(denom));
-}
-
-/** Row subtotal annotation string */
-function rowSubtotal(rawInput, denom, mode) {
+- Returns both subtotal annotations for below-row display.
+- Always computes both dollar total AND count×denom, regardless of input mode.
+  */
+  function rowSubtotals(rawInput, denom, mode) {
   const n = Number(rawInput) || 0;
   if (!n) return null;
-  if (mode === 'count') {
-    const val = Math.floor(n) * denom;
-    return val ? `= $${val.toFixed(2)}` : null;
-  }
-  const count = Math.floor(toCents(n) / toCents(denom));
-  return count ? `= ${count}×` : null;
-}
-
-/**
- * Convert all filled rows between count↔value modes.
- * Uses exact integer arithmetic to avoid drift.
- */
-function convertCash(cash, fromMode, toMode, denomList) {
-  if (fromMode === toMode) return cash;
-  const next = { ...cash };
-  for (const { id, val } of denomList) {
-    const raw = Number(cash[id]) || 0;
-    if (!raw) continue;
-    if (fromMode === 'count') {
-      const cents = Math.floor(raw) * toCents(val);
-      next[id] = cents ? fromCents(cents).toString() : '';
-    } else {
-      const count = Math.floor(toCents(raw) / toCents(val));
-      next[id] = count ? String(count) : '';
-    }
-  }
-  return next;
-}
-
-// ── Drop algorithm ──────────────────────────────────────────────────────────────
-/**
- * Given available bill counts and a target drop amount (in dollars), returns
- * the optimal set of bills to pull using a bounded knapsack DP.
- *
- * Design goals (in priority order):
- *  1. Hit the drop target exactly if possible (or as close as bills allow)
- *  2. Pull large-denomination surplus bills before smaller ones
- *  3. Never strip the drawer of any denomination it needs to make change:
- *     floors scale with the target so a $500 drawer keeps more of each
- *     bill than a $200 drawer, with absolute minimums as a safety net
- */
-
-/**
- * Compute how many of each bill denomination to keep in the drawer.
- * Floors are proportional to the target (so a $500 drawer keeps more
- * than a $200 drawer), with absolute minimums so small drawers still
- * have working change.
- *
- *  $20: keep enough to cover ~12% of target value, minimum 2
- *  $10: keep enough to cover ~8%  of target value, minimum 2
- *  $5:  keep enough to cover ~6%  of target value, minimum 3
- *  $1:  keep enough to cover ~3%  of target value, minimum 5
- *  $50/$100: always surplus (keep 0)
- */
-function computeMinKeep(targetDollars) {
+  const count    = mode === ‘count’ ? Math.floor(n) : Math.floor(toCents(n) / toCents(denom));
+  if (count <= 0) return null;
+  const dollarTotal = count * denom;
+  const denomLabel  = denom % 1 === 0 ? `$${denom}` : `$${denom.toFixed(2)}`;
   return {
-    100: 0,
-    50:  0,
-    20:  Math.max(2, Math.ceil(targetDollars * 0.12 / 20)),
-    10:  Math.max(2, Math.ceil(targetDollars * 0.08 / 10)),
-    5:   Math.max(3, Math.ceil(targetDollars * 0.06 /  5)),
-    1:   Math.max(5, Math.ceil(targetDollars * 0.03 /  1)),
+  dollar: `$${dollarTotal.toFixed(2)}`,
+  count:  `${count} × ${denomLabel}`,
   };
+  }
+
+function convertCash(cash, fromMode, toMode, denomList) {
+if (fromMode === toMode) return cash;
+const next = { …cash };
+for (const { id, val } of denomList) {
+const raw = Number(cash[id]) || 0;
+if (!raw) continue;
+if (fromMode === ‘count’) {
+const cents = Math.floor(raw) * toCents(val);
+next[id] = cents ? fromCents(cents).toString() : ‘’;
+} else {
+const count = Math.floor(toCents(raw) / toCents(val));
+next[id] = count ? String(count) : ‘’;
+}
+}
+return next;
+}
+
+function computeMinKeep(t) {
+return { 100:0, 50:0, 20:Math.max(2,Math.ceil(t*.12/20)), 10:Math.max(2,Math.ceil(t*.08/10)), 5:Math.max(3,Math.ceil(t*.06/5)), 1:Math.max(5,Math.ceil(t*.03/1)) };
 }
 
 function computeDrop(cash, billsMode, dropAmount, targetDollars) {
-  if (dropAmount <= 0) return [];
-
-  const targetCents = toCents(dropAmount);
-  const RANK = { 100: 1, 50: 2, 20: 3, 10: 4, 5: 5, 1: 6 };
-
-  // How many of each bill are actually in the drawer
-  const avail = {};
-  for (const d of BILL_DENOMS) {
-    avail[d] = rowCount(cash[String(d)], d, billsMode);
-  }
-
-  // Hard cap: never pull below the computed floor for this target
-  const minKeep = computeMinKeep(targetDollars);
-  const maxPull = {};
-  for (const d of BILL_DENOMS) {
-    maxPull[d] = Math.max(0, avail[d] - minKeep[d]);
-  }
-
-  /**
-   * Cost to pull one unit of denomination d.
-   * Lower cost = preferred to pull.
-   *
-   * Within surplus (avail > minKeep):
-   *   - Large bills are always cheaper than small (RANK drives this)
-   *   - Heavy surplus gets a modest discount but never enough to flip rank order
-   *
-   * At or below minKeep: very high cost — DP avoids these unless no alternative
-   */
-  function billCost(d) {
-    const surplus = avail[d] - minKeep[d];
-    if (surplus <= 0) {
-      return 500 + RANK[d] * 50;
-    }
-    const surplusRatio    = surplus / Math.max(minKeep[d], 1);
-    const surplusDiscount = Math.min(Math.log1p(surplusRatio), 2);
-    return RANK[d] * 5 - surplusDiscount;
-  }
-
-  // Scale to integers for exact Int32Array DP
-  const costs = {};
-  for (const d of BILL_DENOMS) {
-    costs[d] = Math.max(1, Math.round(billCost(d) * 100_000));
-  }
-
-  if (targetCents > 1_000_000) {
-    return greedyDrop(avail, maxPull, targetCents);
-  }
-
-  const INF    = 2_000_000_000;
-  const dp     = new Int32Array(targetCents + 1).fill(INF);
-  const chosen = new Int16Array(targetCents + 1).fill(-1);
-  dp[0] = 0;
-
-  for (const d of BILL_DENOMS) {
-    const dc  = toCents(d);
-    const cnt = maxPull[d]; // hard cap enforces minKeep floor
-    if (!cnt || !dc) continue;
-    const c = costs[d];
-    // Bounded knapsack: one reverse pass per item copy
-    for (let k = 0; k < cnt; k++) {
-      for (let a = targetCents; a >= dc; a--) {
-        const candidate = dp[a - dc] + c;
-        if (candidate < dp[a]) {
-          dp[a]     = candidate;
-          chosen[a] = d;
-        }
-      }
-    }
-  }
-
-  // Find best reachable amount ≤ target
-  let best = 0;
-  for (let a = targetCents; a >= 0; a--) {
-    if (dp[a] < INF) { best = a; break; }
-  }
-
-  // If minKeep constraints made it unreachable, fall back to greedy
-  if (best === 0) return greedyDrop(avail, maxPull, targetCents);
-
-  // Reconstruct solution
-  const bills = {};
-  let rem = best;
-  while (rem > 0) {
-    const d = chosen[rem];
-    if (d === -1) break;
-    bills[d] = (bills[d] || 0) + 1;
-    rem      -= toCents(d);
-  }
-
-  return BILL_DENOMS
-    .filter(d => bills[d] > 0)
-    .map(d => ({ label: `$${d}`, count: bills[d], value: bills[d] * d, denom: d }));
+if (dropAmount <= 0) return [];
+const targetCents = toCents(dropAmount);
+const RANK = { 100:1, 50:2, 20:3, 10:4, 5:5, 1:6 };
+const avail = {};
+for (const d of BILL_DENOMS) avail[d] = rowCount(cash[String(d)], d, billsMode);
+const minKeep = computeMinKeep(targetDollars);
+const maxPull = {};
+for (const d of BILL_DENOMS) maxPull[d] = Math.max(0, avail[d] - minKeep[d]);
+function billCost(d) {
+const surplus = avail[d] - minKeep[d];
+if (surplus <= 0) return 500 + RANK[d] * 50;
+return RANK[d] * 5 - Math.min(Math.log1p(surplus / Math.max(minKeep[d], 1)), 2);
+}
+const costs = {};
+for (const d of BILL_DENOMS) costs[d] = Math.max(1, Math.round(billCost(d) * 100_000));
+if (targetCents > 1_000_000) return greedyDrop(avail, maxPull, targetCents);
+const INF = 2_000_000_000;
+const dp = new Int32Array(targetCents + 1).fill(INF);
+const chosen = new Int16Array(targetCents + 1).fill(-1);
+dp[0] = 0;
+for (const d of BILL_DENOMS) {
+const dc = toCents(d), cnt = maxPull[d], c = costs[d];
+if (!cnt || !dc) continue;
+for (let k = 0; k < cnt; k++)
+for (let a = targetCents; a >= dc; a–) {
+const cand = dp[a - dc] + c;
+if (cand < dp[a]) { dp[a] = cand; chosen[a] = d; }
+}
+}
+let best = 0;
+for (let a = targetCents; a >= 0; a–) if (dp[a] < INF) { best = a; break; }
+if (best === 0) return greedyDrop(avail, maxPull, targetCents);
+const bills = {};
+let rem = best;
+while (rem > 0) { const d = chosen[rem]; if (d === -1) break; bills[d] = (bills[d]||0)+1; rem -= toCents(d); }
+return BILL_DENOMS.filter(d=>bills[d]>0).map(d=>({label:`$${d}`,count:bills[d],value:bills[d]*d,denom:d}));
 }
 
-
-/**
- * Greedy fallback for very large drops (>$10k) or when DP finds no solution.
- * Respects maxPull (minKeep floors) and pulls large bills first.
- */
 function greedyDrop(avail, maxPull, targetCents) {
-  const RANK  = { 100: 1, 50: 2, 20: 3, 10: 4, 5: 5, 1: 6 };
-  const order = [...BILL_DENOMS].sort((a, b) => {
-    const sa = maxPull[a], sb = maxPull[b];
-    if (sa > 0 && sb <= 0) return -1;
-    if (sb > 0 && sa <= 0) return  1;
-    return RANK[a] - RANK[b];
-  });
-  let rem = targetCents;
-  const out = [];
-  for (const d of order) {
-    const dc   = toCents(d);
-    const take = Math.min(maxPull[d], Math.floor(rem / dc));
-    if (take > 0) {
-      out.push({ label: `$${d}`, count: take, value: take * d, denom: d });
-      rem -= take * dc;
-    }
-  }
-  return out.sort((a, b) => b.denom - a.denom);
+const RANK = {100:1,50:2,20:3,10:4,5:5,1:6};
+const order = […BILL_DENOMS].sort((a,b)=>{
+const sa=maxPull[a],sb=maxPull[b];
+if(sa>0&&sb<=0)return -1; if(sb>0&&sa<=0)return 1; return RANK[a]-RANK[b];
+});
+let rem = targetCents; const out = [];
+for (const d of order) {
+const dc=toCents(d), take=Math.min(maxPull[d],Math.floor(rem/dc));
+if(take>0){out.push({label:`$${d}`,count:take,value:take*d,denom:d});rem-=take*dc;}
+}
+return out.sort((a,b)=>b.denom-a.denom);
 }
 
-// ── History helpers ─────────────────────────────────────────────────────────────
 function loadHistory() { return lsGet(LS_HISTORY, []); }
-function pushHistory(entry) {
-  const h = loadHistory();
-  lsSet(LS_HISTORY, [entry, ...h].slice(0, 50));
-}
-function formatTime(ts) {
-  return new Date(ts).toLocaleString(undefined, {
-    month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit',
-  });
-}
+function pushHistory(entry) { lsSet(LS_HISTORY, [entry, …loadHistory()].slice(0, 50)); }
+function formatTime(ts) { return new Date(ts).toLocaleString(undefined,{month:‘short’,day:‘numeric’,hour:‘numeric’,minute:‘2-digit’}); }
 
-// ── Confetti ────────────────────────────────────────────────────────────────────
 function launchConfetti() {
-  const canvas = document.getElementById('confetti-canvas');
-  if (!canvas) return;
-  canvas.width  = window.innerWidth;
-  canvas.height = window.innerHeight;
-  const ctx    = canvas.getContext('2d');
-  const COLORS = ['#3fb950','#58a6ff','#e3b341','#f78166','#bc8cff','#ffa657'];
-  const pieces = Array.from({ length: 120 }, () => ({
-    x: Math.random() * canvas.width,
-    y: -10 - Math.random() * 200,
-    vx: (Math.random() - 0.5) * 6,
-    vy: 3 + Math.random() * 4,
-    color: COLORS[Math.floor(Math.random() * COLORS.length)],
-    w: 6 + Math.random() * 6,
-    h: 10 + Math.random() * 6,
-    rot: Math.random() * 360,
-    rv: (Math.random() - 0.5) * 8,
-    alpha: 1,
-  }));
-
-  let raf;
-  const tick = () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    let alive = 0;
-    for (const p of pieces) {
-      p.x += p.vx; p.y += p.vy; p.vy += 0.08;
-      p.rot += p.rv; p.alpha -= 0.008;
-      if (p.y < canvas.height && p.alpha > 0) {
-        alive++;
-        ctx.save();
-        ctx.globalAlpha = Math.max(0, p.alpha);
-        ctx.translate(p.x, p.y);
-        ctx.rotate(p.rot * Math.PI / 180);
-        ctx.fillStyle = p.color;
-        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
-        ctx.restore();
-      }
-    }
-    if (alive > 0) raf = requestAnimationFrame(tick);
-    else ctx.clearRect(0, 0, canvas.width, canvas.height);
-  };
-  tick();
-  setTimeout(() => {
-    cancelAnimationFrame(raf);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }, 5000);
+const canvas = document.getElementById(‘confetti-canvas’);
+if (!canvas) return;
+canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+const ctx = canvas.getContext(‘2d’);
+const COLORS = [’#3fb950’,’#58a6ff’,’#e3b341’,’#f78166’,’#bc8cff’,’#ffa657’];
+const pieces = Array.from({length:120}, ()=>({
+x:Math.random()*canvas.width, y:-10-Math.random()*200,
+vx:(Math.random()-.5)*6, vy:3+Math.random()*4,
+color:COLORS[Math.floor(Math.random()*COLORS.length)],
+w:6+Math.random()*6, h:10+Math.random()*6,
+rot:Math.random()*360, rv:(Math.random()-.5)*8, alpha:1,
+}));
+let raf;
+const tick = () => {
+ctx.clearRect(0,0,canvas.width,canvas.height);
+let alive = 0;
+for (const p of pieces) {
+p.x+=p.vx; p.y+=p.vy; p.vy+=.08; p.rot+=p.rv; p.alpha-=.008;
+if (p.y<canvas.height&&p.alpha>0) {
+alive++;
+ctx.save(); ctx.globalAlpha=Math.max(0,p.alpha); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
+ctx.fillStyle=p.color; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore();
+}
+}
+if(alive>0) raf=requestAnimationFrame(tick); else ctx.clearRect(0,0,canvas.width,canvas.height);
+};
+tick();
+setTimeout(()=>{cancelAnimationFrame(raf);ctx.clearRect(0,0,canvas.width,canvas.height);},5000);
 }
 
-// ── Haptic helper ────────────────────────────────────────────────────────────────
-const haptic = p => { try { navigator.vibrate?.(p); } catch { /* unsupported */ } };
+const haptic = p => { try { navigator.vibrate?.(p); } catch {} };
 
-// ── Reusable UI primitives ──────────────────────────────────────────────────────
-const Toggle = ({ on, onChange }) => (
-  <button className={`toggle-track ${on ? 'on' : 'off'}`} onClick={onChange}>
-    <div className="toggle-thumb" />
-  </button>
+const Toggle = ({on,onChange}) => (
+<button className={`toggle-track ${on?'on':'off'}`} onClick={onChange}>
+<div className="toggle-thumb"/>
+</button>
 );
 
-const ModeToggle = ({ mode, onChange }) => (
+const ModeToggle = ({mode,onChange}) => (
+
   <div className="mode-toggle">
-    {['count', 'value'].map(m => (
-      <button
-        key={m}
-        className={`mode-btn${mode === m ? ' active' : ''}`}
-        onClick={() => { haptic([5]); onChange(m); }}
-      >
-        {m.charAt(0).toUpperCase() + m.slice(1)}
+    {['count','value'].map(m=>(
+      <button key={m} className={`mode-btn${mode===m?' active':''}`} onClick={()=>{haptic([5]);onChange(m);}}>
+        {m.charAt(0).toUpperCase()+m.slice(1)}
       </button>
     ))}
   </div>
 );
 
-// ── Sheet drag-to-dismiss hook ──────────────────────────────────────────────────
 function useSheetDismiss(onDismiss) {
-  const ref  = useRef(null);
-  const startY = useRef(null);
-  return {
-    ref,
-    onTouchStart: e => { startY.current = e.touches[0].clientY; },
-    onTouchMove: e => {
-      const dy = e.touches[0].clientY - startY.current;
-      if (dy > 0 && ref.current) ref.current.style.transform = `translateY(${dy}px)`;
-    },
-    onTouchEnd: e => {
-      const dy = e.changedTouches[0].clientY - startY.current;
-      if (ref.current) ref.current.style.transform = '';
-      if (dy > 80) { haptic([6]); onDismiss(); }
-      startY.current = null;
-    },
-  };
+const ref = useRef(null), startY = useRef(null);
+return {
+ref,
+onTouchStart: e => { startY.current = e.touches[0].clientY; },
+onTouchMove:  e => { const dy=e.touches[0].clientY-startY.current; if(dy>0&&ref.current) ref.current.style.transform=`translateY(${dy}px)`; },
+onTouchEnd:   e => {
+const dy=e.changedTouches[0].clientY-startY.current;
+if(ref.current) ref.current.style.transform=’’;
+if(dy>80){haptic([6]);onDismiss();}
+startY.current=null;
+},
+};
 }
 
-// ── Denom rows ──────────────────────────────────────────────────────────────────
+// ── SubtotalRow: pill badges shown BELOW each input row ───────────────────────
+const SubtotalRow = ({ subs, mode }) => {
+if (!subs) return null;
+// In count mode: left=dollar (primary), right=count breakdown
+// In value mode: left=count breakdown (primary), right=dollar
+const [left, leftType, right, rightType] = mode === ‘count’
+? [subs.dollar, ‘dollar’, subs.count, ‘count’]
+: [subs.count,  ‘count’,  subs.dollar, ‘dollar’];
+return (
+<div className="denom-sub-row">
+<span className={`denom-sub-badge ${leftType}`}>{left}</span>
+<span className="denom-sub-sep">·</span>
+<span className={`denom-sub-badge ${rightType}`}>{right}</span>
+</div>
+);
+};
+
+// ── BillRow ───────────────────────────────────────────────────────────────────
 const BillRow = memo(({ id, label, denom, inputMode, value, onManualInput, onStep, onClear }) => {
-  const has  = Number(value) > 0;
-  const sub  = rowSubtotal(value, denom, inputMode);
-  const holdTimer = useRef(null);
-
-  const startHold = () => {
-    holdTimer.current = setTimeout(() => {
-      if (Number(value) > 0) { haptic([10, 40, 20]); onClear(id); }
-    }, 600);
-  };
-  const cancelHold = () => clearTimeout(holdTimer.current);
-
-  return (
-    <div className={`denom-row${has ? ' has-value' : ''}`}>
-      <span className={`denom-label${has ? ' active' : ''}`}>{label}</span>
-      <div className="denom-input-wrap">
-        {inputMode === 'value' && <span className="denom-prefix">$</span>}
-        <input
-          type="number" min="0" step="any" inputMode="decimal"
-          className={`denom-input${inputMode === 'value' ? ' has-prefix' : ''}`}
-          value={value}
-          onChange={e => onManualInput(id, e.target.value)}
-          onWheel={e => e.target.blur()}
-          placeholder="0"
-        />
-        {sub && <span className="row-sub">{sub}</span>}
-      </div>
-      <div className="stepper">
-        <button
-          onPointerDown={() => { haptic([5]); startHold(); }}
-          onPointerUp={cancelHold} onPointerLeave={cancelHold}
-          onClick={() => onStep(id, -1, denom)}
-          className="step-btn"
-          title="Hold to clear"
-        >
-          <Icon path={PATH.minus} size={18} />
-        </button>
-        <button
-          onPointerDown={() => haptic([8])}
-          onClick={() => onStep(id, 1, denom)}
-          className={`step-btn plus${has ? ' active' : ''}`}
-        >
-          <Icon path={PATH.plus} size={18} />
-        </button>
-      </div>
-    </div>
-  );
+const has  = Number(value) > 0;
+const subs = rowSubtotals(value, denom, inputMode);
+const holdTimer = useRef(null);
+const startHold = () => { holdTimer.current = setTimeout(()=>{ if(Number(value)>0){haptic([10,40,20]);onClear(id);} },600); };
+const cancelHold = () => clearTimeout(holdTimer.current);
+return (
+<div className={`denom-row-wrap${has?' has-value':''}`}>
+<div className="denom-row">
+<span className={`denom-label${has?' active':''}`}>{label}</span>
+<div className="denom-input-wrap">
+{inputMode===‘value’&&<span className="denom-prefix">$</span>}
+<input type=“number” min=“0” step=“any” inputMode=“decimal”
+className={`denom-input${inputMode==='value'?' has-prefix':''}`}
+value={value} onChange={e=>onManualInput(id,e.target.value)}
+onWheel={e=>e.target.blur()} placeholder=“0”/>
+</div>
+<div className="stepper">
+<button onPointerDown={()=>{haptic([5]);startHold();}} onPointerUp={cancelHold} onPointerLeave={cancelHold}
+onClick={()=>onStep(id,-1,denom)} className=“step-btn” title=“Hold to clear”>
+<Icon path={PATH.minus} size={18}/>
+</button>
+<button onPointerDown={()=>haptic([8])} onClick={()=>onStep(id,1,denom)}
+className={`step-btn plus${has?' active':''}`}>
+<Icon path={PATH.plus} size={18}/>
+</button>
+</div>
+</div>
+<SubtotalRow subs={subs} mode={inputMode}/>
+</div>
+);
 });
 
+// ── CoinRow ───────────────────────────────────────────────────────────────────
 const CoinRow = memo(({ id, label, denom, inputMode, value, onManualInput, onStep, rollCount, onClear }) => {
-  const has  = Number(value) > 0;
-  const sub  = rowSubtotal(value, denom, inputMode);
-  const holdTimer = useRef(null);
-
-  const startHold = () => {
-    holdTimer.current = setTimeout(() => {
-      if (Number(value) > 0) { haptic([10, 40, 20]); onClear(id); }
-    }, 600);
-  };
-  const cancelHold = () => clearTimeout(holdTimer.current);
-
-  return (
-    <div className={`denom-row${has ? ' has-value' : ''}`}>
-      <span className={`denom-label${has ? ' active' : ''}`}>{label}</span>
-      <div className="denom-input-wrap">
-        {inputMode === 'value' && <span className="denom-prefix">$</span>}
-        <input
-          type="number" min="0" step="any" inputMode="decimal"
-          className={`denom-input${inputMode === 'value' ? ' has-prefix' : ''}`}
-          value={value}
-          onChange={e => onManualInput(id, e.target.value)}
-          onWheel={e => e.target.blur()}
-          placeholder="0"
-        />
-        {sub && <span className="row-sub">{sub}</span>}
-      </div>
-      <div className="stepper">
-        {rollCount && (
-          <button
-            onPointerDown={() => haptic([6, 30, 10])}
-            onClick={() => onStep(id, rollCount, denom)}
-            className="roll-btn"
-          >
-            <div className="roll-btn-icons">
-              <Icon path={PATH.plus} size={11} /><Icon path={PATH.coin} size={14} />
-            </div>
-            <span className="roll-btn-label">
-              {inputMode === 'count' ? `+${rollCount}` : `+$${(rollCount * denom).toFixed(0)}`}
-            </span>
-          </button>
-        )}
-        <button
-          onPointerDown={() => { haptic([5]); startHold(); }}
-          onPointerUp={cancelHold} onPointerLeave={cancelHold}
-          onClick={() => onStep(id, -1, denom)}
-          className="step-btn"
-          title="Hold to clear"
-        >
-          <Icon path={PATH.minus} size={16} />
-        </button>
-        <button
-          onPointerDown={() => haptic([7])}
-          onClick={() => onStep(id, 1, denom)}
-          className={`step-btn plus${has ? ' active' : ''}`}
-        >
-          <Icon path={PATH.plus} size={16} />
-        </button>
-      </div>
-    </div>
-  );
+const has  = Number(value) > 0;
+const subs = rowSubtotals(value, denom, inputMode);
+const holdTimer = useRef(null);
+const startHold = () => { holdTimer.current = setTimeout(()=>{ if(Number(value)>0){haptic([10,40,20]);onClear(id);} },600); };
+const cancelHold = () => clearTimeout(holdTimer.current);
+return (
+<div className={`denom-row-wrap${has?' has-value':''}`}>
+<div className="denom-row">
+<span className={`denom-label${has?' active':''}`}>{label}</span>
+<div className="denom-input-wrap">
+{inputMode===‘value’&&<span className="denom-prefix">$</span>}
+<input type=“number” min=“0” step=“any” inputMode=“decimal”
+className={`denom-input${inputMode==='value'?' has-prefix':''}`}
+value={value} onChange={e=>onManualInput(id,e.target.value)}
+onWheel={e=>e.target.blur()} placeholder=“0”/>
+</div>
+<div className="stepper">
+{rollCount&&(
+<button onPointerDown={()=>haptic([6,30,10])} onClick={()=>onStep(id,rollCount,denom)} className=“roll-btn”>
+<div className="roll-btn-icons"><Icon path={PATH.plus} size={11}/><Icon path={PATH.coin} size={14}/></div>
+<span className="roll-btn-label">{inputMode===‘count’?`+${rollCount}`:`+$${(rollCount*denom).toFixed(0)}`}</span>
+</button>
+)}
+<button onPointerDown={()=>{haptic([5]);startHold();}} onPointerUp={cancelHold} onPointerLeave={cancelHold}
+onClick={()=>onStep(id,-1,denom)} className=“step-btn” title=“Hold to clear”>
+<Icon path={PATH.minus} size={16}/>
+</button>
+<button onPointerDown={()=>haptic([7])} onClick={()=>onStep(id,1,denom)}
+className={`step-btn plus${has?' active':''}`}>
+<Icon path={PATH.plus} size={16}/>
+</button>
+</div>
+</div>
+<SubtotalRow subs={subs} mode={inputMode}/>
+</div>
+);
 });
 
-// ── Animated total (bump on change) ────────────────────────────────────────────
-function AnimatedTotal({ value, className }) {
-  const [bump, setBump]  = useState(false);
-  const prevRef = useRef(value);
-  const timerRef = useRef(null);
-
-  useEffect(() => {
-    if (value !== prevRef.current) {
-      prevRef.current = value;
-      setBump(true);
-      clearTimeout(timerRef.current);
-      timerRef.current = setTimeout(() => setBump(false), 200);
-    }
-    return () => clearTimeout(timerRef.current);
-  }, [value]);
-
-  return <div className={`${className}${bump ? ' bump' : ''}`}>{value}</div>;
+function AnimatedTotal({value,className}) {
+const [bump,setBump]=useState(false), prevRef=useRef(value), timerRef=useRef(null);
+useEffect(()=>{
+if(value!==prevRef.current){prevRef.current=value;setBump(true);clearTimeout(timerRef.current);timerRef.current=setTimeout(()=>setBump(false),200);}
+return()=>clearTimeout(timerRef.current);
+},[value]);
+return <div className={`${className}${bump?' bump':''}`}>{value}</div>;
 }
 
-// ── Progress bar ────────────────────────────────────────────────────────────────
-function ProgressBar({ over, target, totalCash, recordDrop, gamification }) {
-  // "Beat your record" threshold = target + previous best drop
-  const beatAt    = recordDrop > 0 ? target + recordDrop : 0;
-  const barMax    = Math.max(totalCash, beatAt > 0 ? beatAt * 1.08 : 0, target || 1);
-  const filledPct = Math.min(100, (totalCash / barMax) * 100);
-  const flagPct   = gamification && recordDrop > 0
-    ? Math.min(91, Math.max(9, (beatAt / barMax) * 100))
-    : null;
-
-  return (
-    <div>
-      <div className="progress-track" style={{ height: '8px' }}>
-        <div className={`progress-fill${over ? ' over' : ''}`} style={{ width: `${filledPct}%` }} />
-      </div>
-      {flagPct != null && (
-        <div className="progress-flag-wrap">
-          <div className="progress-flag" style={{ left: `${flagPct}%` }}>
-            <div className="progress-flag-pole" />
-            <div className="progress-flag-tag">beat at ${beatAt.toFixed(0)}</div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+function ProgressBar({over,target,totalCash,recordDrop,gamification}) {
+const beatAt=recordDrop>0?target+recordDrop:0;
+const barMax=Math.max(totalCash,beatAt>0?beatAt*1.08:0,target||1);
+const filledPct=Math.min(100,(totalCash/barMax)*100);
+const flagPct=gamification&&recordDrop>0?Math.min(91,Math.max(9,(beatAt/barMax)*100)):null;
+return (
+<div>
+<div className=“progress-track” style={{height:‘8px’}}>
+<div className={`progress-fill${over?' over':''}`} style={{width:`${filledPct}%`}}/>
+</div>
+{flagPct!=null&&(
+<div className="progress-flag-wrap">
+<div className=“progress-flag” style={{left:`${flagPct}%`}}>
+<div className="progress-flag-pole"/>
+<div className="progress-flag-tag">beat at ${beatAt.toFixed(0)}</div>
+</div>
+</div>
+)}
+</div>
+);
 }
 
-// ── Tutorial ────────────────────────────────────────────────────────────────────
 const TUTORIAL_STEPS = [
-  { title: 'Welcome to Apple-Counter!',  body: "Count your drawer quickly and calculate exactly what to drop. Let's take a quick tour — or skip anytime.", target: null },
-  { title: 'Enter Bill Counts',          body: 'Tap + to add bills, or type directly. Switch between Count and Value mode with the toggle.',               target: 'bills-card' },
-  { title: 'Enter Coins Too',            body: 'Same deal for coins. Hit the blue button to add a full roll at once.',                                      target: 'coins-card' },
-  { title: 'Watch the Progress Bar',     body: 'The bar fills as you count. It turns green when you hit target. A flag shows your record drop.',            target: 'progress-bar' },
-  { title: 'Calculate Your Drop',        body: 'Tap Calculate to see exactly which bills to pull out. Your drop is auto-saved to history.',                 target: 'calc-btn' },
-  { title: 'Your Header Buttons',        body: 'Sun/Moon toggles Dark Mode. Clock opens Drop History. Gear opens Settings. Refresh clears everything.',     target: 'header-actions' },
-  { title: "You're all set!",            body: "Have a great shift! Tap Settings anytime to replay this tour or learn more about Apple-Counter.",           target: null },
+{title:‘Welcome to Apple-Counter!’, body:“Count your drawer quickly and calculate exactly what to drop. Let’s take a quick tour — or skip anytime.”, target:null},
+{title:‘Enter Bill Counts’,         body:‘Tap + to add bills, or type directly. The green/blue badges below each row show the dollar total and count breakdown.’, target:‘bills-card’},
+{title:‘Enter Coins Too’,           body:‘Same deal for coins. Hit the blue button to add a full roll at once.’, target:‘coins-card’},
+{title:‘Watch the Progress Bar’,    body:‘The bar fills as you count. It turns green when you hit target. A flag shows your record drop.’, target:‘progress-bar’},
+{title:‘Calculate Your Drop’,       body:‘Tap Calculate to see exactly which bills to pull out. Your drop is auto-saved to history.’, target:‘calc-btn’},
+{title:‘Your Header Buttons’,       body:‘Sun/Moon toggles Dark Mode. Clock opens Drop History. Gear opens Settings. Refresh clears everything.’, target:‘header-actions’},
+{title:“You’re all set!”,           body:“Have a great shift! Tap Settings anytime to replay this tour or learn more about Apple-Counter.”, target:null},
 ];
-const SPOTLIGHT_PAD = 10;
 
-function Tutorial({ onDone }) {
-  const [step, setStep]         = useState(0);
-  const [spotlight, setSpotlight] = useState(null);
-  const [cardBottom, setCardBottom] = useState(120);
-  const [animKey, setAnimKey]   = useState(0);
-  const timeoutRef = useRef(null);
-  const s = TUTORIAL_STEPS[step];
-
-  useEffect(() => {
-    setAnimKey(k => k + 1);
-    clearTimeout(timeoutRef.current);
-
-    if (!s.target) {
-      setSpotlight(null);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      setCardBottom(120);
-      return;
-    }
-    const el = document.getElementById(s.target);
-    if (!el) { setSpotlight(null); return; }
-    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-    timeoutRef.current = setTimeout(() => {
-      const r   = el.getBoundingClientRect();
-      const p   = SPOTLIGHT_PAD;
-      setSpotlight({ x: r.left - p, y: r.top - p, w: r.width + p * 2, h: r.height + p * 2, rx: 10 });
-      const vh   = window.innerHeight;
-      const midY = r.top + r.height / 2;
-      if (midY > vh * 0.45) {
-        setCardBottom(Math.min(Math.max(110, vh - r.top + p + 16), vh - 240));
-      } else {
-        setCardBottom(80);
-      }
-    }, 420);
-
-    return () => clearTimeout(timeoutRef.current);
-  }, [step]);
-
-  const next = () => {
-    haptic([5]);
-    if (step < TUTORIAL_STEPS.length - 1) setStep(s => s + 1);
-    else onDone();
-  };
-
-  const W = window.innerWidth, H = window.innerHeight;
-  const svgContent = spotlight
-    ? `<defs>
-        <mask id="tm">
-          <rect width="${W}" height="${H}" fill="white"/>
-          <rect x="${spotlight.x}" y="${spotlight.y}" width="${spotlight.w}" height="${spotlight.h}" rx="${spotlight.rx}" fill="black"/>
-        </mask>
-        <filter id="glow">
-          <feGaussianBlur stdDeviation="3" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-      </defs>
-      <rect width="${W}" height="${H}" fill="rgba(0,0,0,0.78)" mask="url(#tm)"/>
-      <rect x="${spotlight.x}" y="${spotlight.y}" width="${spotlight.w}" height="${spotlight.h}"
-        rx="${spotlight.rx}" fill="none" stroke="rgba(61,107,158,0.95)" stroke-width="2.5"
-        filter="url(#glow)" style="animation:spotGlow 2s ease-in-out infinite"/>`
-    : `<rect width="${W}" height="${H}" fill="rgba(0,0,0,0.78)"/>`;
-
-  return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 100, pointerEvents: 'none' }}>
-      <svg className="tutorial-svg" dangerouslySetInnerHTML={{ __html: svgContent }} />
-      <div key={animKey} className="tutorial-card" style={{ bottom: `${cardBottom}px` }}>
-        <div className="tut-step-num">Step {step + 1} of {TUTORIAL_STEPS.length}</div>
-        <div className="tut-title">{s.title}</div>
-        <div className="tut-body">{s.body}</div>
-        <div className="tut-nav">
-          <button className="tut-skip" onClick={() => { haptic([4]); onDone(); }}>Skip tour</button>
-          <div className="tut-dots">
-            {TUTORIAL_STEPS.map((_, i) => (
-              <div key={i} className={`tut-dot${i === step ? ' active' : ''}`} />
-            ))}
-          </div>
-          <button className="tut-btn primary" onClick={next}>
-            {step === TUTORIAL_STEPS.length - 1 ? 'Done' : 'Next'}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+function Tutorial({onDone}) {
+const [step,setStep]=useState(0),[spotlight,setSpotlight]=useState(null);
+const [cardBottom,setCardBottom]=useState(120),[animKey,setAnimKey]=useState(0);
+const timeoutRef=useRef(null); const s=TUTORIAL_STEPS[step];
+useEffect(()=>{
+setAnimKey(k=>k+1); clearTimeout(timeoutRef.current);
+if(!s.target){setSpotlight(null);window.scrollTo({top:0,behavior:‘smooth’});setCardBottom(120);return;}
+const el=document.getElementById(s.target);
+if(!el){setSpotlight(null);return;}
+el.scrollIntoView({behavior:‘smooth’,block:‘center’});
+timeoutRef.current=setTimeout(()=>{
+const r=el.getBoundingClientRect(),p=10;
+setSpotlight({x:r.left-p,y:r.top-p,w:r.width+p*2,h:r.height+p*2,rx:10});
+const vh=window.innerHeight,midY=r.top+r.height/2;
+setCardBottom(midY>vh*.45?Math.min(Math.max(110,vh-r.top+p+16),vh-240):80);
+},420);
+return()=>clearTimeout(timeoutRef.current);
+},[step]);
+const next=()=>{haptic([5]);if(step<TUTORIAL_STEPS.length-1)setStep(s=>s+1);else onDone();};
+const W=window.innerWidth,H=window.innerHeight;
+const svgContent=spotlight
+?`<defs><mask id="tm"><rect width="${W}" height="${H}" fill="white"/><rect x="${spotlight.x}" y="${spotlight.y}" width="${spotlight.w}" height="${spotlight.h}" rx="${spotlight.rx}" fill="black"/></mask><filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="${W}" height="${H}" fill="rgba(0,0,0,0.78)" mask="url(#tm)"/><rect x="${spotlight.x}" y="${spotlight.y}" width="${spotlight.w}" height="${spotlight.h}" rx="${spotlight.rx}" fill="none" stroke="rgba(61,107,158,0.95)" stroke-width="2.5" filter="url(#glow)" style="animation:spotGlow 2s ease-in-out infinite"/>`
+:`<rect width="${W}" height="${H}" fill="rgba(0,0,0,0.78)"/>`;
+return (
+<div style={{position:‘fixed’,inset:0,zIndex:100,pointerEvents:‘none’}}>
+<svg className="tutorial-svg" dangerouslySetInnerHTML={{__html:svgContent}}/>
+<div key={animKey} className=“tutorial-card” style={{bottom:`${cardBottom}px`}}>
+<div className="tut-step-num">Step {step+1} of {TUTORIAL_STEPS.length}</div>
+<div className="tut-title">{s.title}</div>
+<div className="tut-body">{s.body}</div>
+<div className="tut-nav">
+<button className=“tut-skip” onClick={()=>{haptic([4]);onDone();}}>Skip tour</button>
+<div className="tut-dots">{TUTORIAL_STEPS.map((_,i)=><div key={i} className={`tut-dot${i===step?' active':''}`}/>)}</div>
+<button className="tut-btn primary" onClick={next}>{step===TUTORIAL_STEPS.length-1?‘Done’:‘Next’}</button>
+</div>
+</div>
+</div>
+);
 }
 
-// ── Modal components ────────────────────────────────────────────────────────────
-function ConfirmModal({ title, body, confirmLabel, onConfirm, onCancel }) {
-  return (
-    <div className="modal-backdrop" onClick={e => { if (e.target === e.currentTarget) onCancel(); }}>
-      <div className="modal-card" onClick={e => e.stopPropagation()}>
-        <div className="modal-title">{title}</div>
-        <div className="modal-body">{body}</div>
-        <div className="modal-actions">
-          <button className="modal-btn danger" onClick={onConfirm}>{confirmLabel}</button>
-          <button className="modal-btn cancel" onClick={onCancel}>Cancel</button>
-        </div>
-      </div>
-    </div>
-  );
+function ConfirmModal({title,body,confirmLabel,onConfirm,onCancel}) {
+return (
+<div className=“modal-backdrop” onClick={e=>{if(e.target===e.currentTarget)onCancel();}}>
+<div className=“modal-card” onClick={e=>e.stopPropagation()}>
+<div className="modal-title">{title}</div>
+<div className="modal-body">{body}</div>
+<div className="modal-actions">
+<button className="modal-btn danger" onClick={onConfirm}>{confirmLabel}</button>
+<button className="modal-btn cancel" onClick={onCancel}>Cancel</button>
+</div>
+</div>
+</div>
+);
 }
 
-function AboutModal({ onClose }) {
-  return (
-    <div className="modal-backdrop" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="modal-card" onClick={e => e.stopPropagation()}>
-        <div className="about-logo">
-          <i className="fa-solid fa-apple-whole" style={{ fontSize: '36px' }} />
-        </div>
-
-        <div className="about-tagline">"Counting is freakin' hard, man."</div>
-
-        <div className="about-credit">
-          Created by <strong>Garrett</strong> to make counting your drawer a little easier.
-          <br /><br />
-          Apple-Counter helps you quickly total up your drawer and figure out exactly
-          what needs to be dropped; almost set it and forget it!
-          <br /><br />
-          It uses some pretty advanced algorithms to calculate the best possible drawer
-          makeup. No more ending up with barely any ones or way too many twenties.
-        </div>
-
-        <div className="modal-actions" style={{ marginTop: '22px' }}>
-          <button className="modal-btn cancel" onClick={onClose}>Close</button>
-        </div>
-      </div>
-    </div>
-  );
+function AboutModal({onClose}) {
+return (
+<div className=“modal-backdrop” onClick={e=>{if(e.target===e.currentTarget)onClose();}}>
+<div className=“modal-card” onClick={e=>e.stopPropagation()}>
+<div className="about-logo"><i className=“fa-solid fa-apple-whole” style={{fontSize:‘36px’}}/></div>
+<div className="about-tagline">“Counting is freakin’ hard, man.”</div>
+<div className="about-credit">
+Created by <strong>Garrett</strong> to make counting your drawer a little easier.<br/><br/>
+Apple-Counter helps you quickly total up your drawer and figure out exactly what needs to be dropped; almost set it and forget it!<br/><br/>
+It uses some pretty advanced algorithms to calculate the best possible drawer makeup. No more ending up with barely any ones or way too many twenties.
+</div>
+<div className=“modal-actions” style={{marginTop:‘22px’}}>
+<button className="modal-btn cancel" onClick={onClose}>Close</button>
+</div>
+</div>
+</div>
+);
 }
 
-function NewRecord({ amount, onDismiss }) {
-  return (
-    <div className="record-overlay" onClick={onDismiss}>
-      <div className="record-card" onClick={e => e.stopPropagation()}>
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
-          <Icon path={PATH.trophy} size={52} stroke="#d29922" strokeWidth="1.5" />
-        </div>
-        <div className="record-title">New Drop Record!</div>
-        <div className="record-amount">${amount.toFixed(2)}</div>
-        <div className="record-sub">That's your biggest drop yet. Nice work!</div>
-        <button className="record-dismiss" onClick={onDismiss}>Awesome!</button>
-      </div>
-    </div>
-  );
+function NewRecord({amount,onDismiss}) {
+return (
+<div className="record-overlay" onClick={onDismiss}>
+<div className=“record-card” onClick={e=>e.stopPropagation()}>
+<div style={{display:‘flex’,justifyContent:‘center’,marginBottom:‘12px’}}>
+<Icon path={PATH.trophy} size={52} stroke="#d29922" strokeWidth="1.5"/>
+</div>
+<div className="record-title">New Drop Record!</div>
+<div className="record-amount">${amount.toFixed(2)}</div>
+<div className="record-sub">That’s your biggest drop yet. Nice work!</div>
+<button className="record-dismiss" onClick={onDismiss}>Awesome!</button>
+</div>
+</div>
+);
 }
 
-// ── History panel ───────────────────────────────────────────────────────────────
-function HistoryPanel({ onClose, onRecordCleared }) {
-  const [history, setHistory]           = useState(loadHistory);
-  const [showClearConfirm, setShowClear] = useState(false);
-  const drag = useSheetDismiss(onClose);
-  const record = lsGet(LS_RECORD, 0);
-
-  const clearHistory = () => {
-    haptic([8, 60, 15]);
-    localStorage.removeItem(LS_HISTORY);
-    setHistory([]);
-    setShowClear(false);
-    onRecordCleared?.();
-  };
-
-  return (
-    <>
-      <div className="sheet-backdrop" onClick={e => { if (e.target === e.currentTarget) { haptic([6]); onClose(); } }}>
-        <div
-          className="sheet scrollable"
-          ref={drag.ref}
-          onTouchStart={drag.onTouchStart}
-          onTouchMove={drag.onTouchMove}
-          onTouchEnd={drag.onTouchEnd}
-          style={{ transition: 'transform .05s' }}
-        >
-          <div className="sheet-handle"><div className="sheet-handle-bar" /></div>
-          <div className="sheet-hd">
-            <span className="sheet-title">Drop History</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              {history.length > 0 && (
-                <button className="clear-btn" onClick={() => { haptic([5]); setShowClear(true); }}>
-                  Clear All
-                </button>
-              )}
-              <button className="icon-btn" onClick={() => { haptic([6]); onClose(); }}>
-                <Icon path={PATH.closeX} size={18} />
-              </button>
-            </div>
-          </div>
-          <div className="sheet-body">
-            {history.length === 0 ? (
-              <div className="history-empty">
-                <div className="history-empty-icon"><Icon path={PATH.clock} size={22} /></div>
-                <div style={{ fontWeight: 700, fontSize: '15px', marginBottom: '6px' }}>No drops yet</div>
-                <div style={{ fontSize: '13px', opacity: .6 }}>Completed counts will appear here</div>
-              </div>
-            ) : history.map((e, i) => (
-              <div key={i} className={`history-entry${e.dropped === record && record > 0 ? ' record' : ''}`}>
-                <div className="history-meta">
-                  <span className="history-time">{formatTime(e.ts)}</span>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    {e.dropped === record && record > 0 && <span className="record-badge">Record</span>}
-                    <span className="history-target">target ${e.target?.toFixed(2)}</span>
-                  </div>
-                </div>
-                <div className="stat-grid">
-                  <div className="stat-pill neutral"><div className="stat-pill-label">Counted</div><div className="stat-pill-value">${e.totalCash.toFixed(2)}</div></div>
-                  <div className="stat-pill green"><div className="stat-pill-label">Dropped</div><div className="stat-pill-value">${e.dropped.toFixed(2)}</div></div>
-                  <div className="stat-pill dark"><div className="stat-pill-label">Remains</div><div className="stat-pill-value">${e.remaining.toFixed(2)}</div></div>
-                </div>
-                {e.dropDetails?.length > 0 && (
-                  <div className="history-chips">
-                    {e.dropDetails.map(d => <span key={d.label} className="history-chip">{d.count}× {d.label}</span>)}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      {showClearConfirm && (
-        <ConfirmModal
-          title="Clear History?"
-          body="This will permanently delete all your saved drop history. This can't be undone."
-          confirmLabel="Clear All History"
-          onConfirm={clearHistory}
-          onCancel={() => setShowClear(false)}
-        />
-      )}
-    </>
-  );
+function HistoryPanel({onClose,onRecordCleared}) {
+const [history,setHistory]=useState(loadHistory);
+const [showClearConfirm,setShowClear]=useState(false);
+const drag=useSheetDismiss(onClose);
+const record=lsGet(LS_RECORD,0);
+const clearHistory=()=>{haptic([8,60,15]);localStorage.removeItem(LS_HISTORY);setHistory([]);setShowClear(false);onRecordCleared?.();};
+return (
+<>
+<div className=“sheet-backdrop” onClick={e=>{if(e.target===e.currentTarget){haptic([6]);onClose();}}}>
+<div className=“sheet scrollable” ref={drag.ref} onTouchStart={drag.onTouchStart} onTouchMove={drag.onTouchMove} onTouchEnd={drag.onTouchEnd} style={{transition:‘transform .05s’}}>
+<div className="sheet-handle"><div className="sheet-handle-bar"/></div>
+<div className="sheet-hd">
+<span className="sheet-title">Drop History</span>
+<div style={{display:‘flex’,alignItems:‘center’,gap:‘12px’}}>
+{history.length>0&&<button className=“clear-btn” onClick={()=>{haptic([5]);setShowClear(true);}}>Clear All</button>}
+<button className=“icon-btn” onClick={()=>{haptic([6]);onClose();}}><Icon path={PATH.closeX} size={18}/></button>
+</div>
+</div>
+<div className="sheet-body">
+{history.length===0?(
+<div className="history-empty">
+<div className="history-empty-icon"><Icon path={PATH.clock} size={22}/></div>
+<div style={{fontWeight:700,fontSize:‘15px’,marginBottom:‘6px’}}>No drops yet</div>
+<div style={{fontSize:‘13px’,opacity:.6}}>Completed counts will appear here</div>
+</div>
+):history.map((e,i)=>(
+<div key={i} className={`history-entry${e.dropped===record&&record>0?' record':''}`}>
+<div className="history-meta">
+<span className="history-time">{formatTime(e.ts)}</span>
+<div style={{display:‘flex’,alignItems:‘center’,gap:‘8px’}}>
+{e.dropped===record&&record>0&&<span className="record-badge">Record</span>}
+<span className="history-target">target ${e.target?.toFixed(2)}</span>
+</div>
+</div>
+<div className="stat-grid">
+<div className="stat-pill neutral"><div className="stat-pill-label">Counted</div><div className="stat-pill-value">${e.totalCash.toFixed(2)}</div></div>
+<div className="stat-pill green"><div className="stat-pill-label">Dropped</div><div className="stat-pill-value">${e.dropped.toFixed(2)}</div></div>
+<div className="stat-pill dark"><div className="stat-pill-label">Remains</div><div className="stat-pill-value">${e.remaining.toFixed(2)}</div></div>
+</div>
+{e.dropDetails?.length>0&&<div className="history-chips">{e.dropDetails.map(d=><span key={d.label} className="history-chip">{d.count}× {d.label}</span>)}</div>}
+</div>
+))}
+</div>
+</div>
+</div>
+{showClearConfirm&&<ConfirmModal title=“Clear History?” body=“This will permanently delete all your saved drop history. This can’t be undone.” confirmLabel=“Clear All History” onConfirm={clearHistory} onCancel={()=>setShowClear(false)}/>}
+</>
+);
 }
 
-// ── Settings panel ──────────────────────────────────────────────────────────────
-function SettingsPanel({ onClose, settings, onChange, onReplayTutorial, onShowAbout }) {
-  const drag = useSheetDismiss(onClose);
-  return (
-    <div className="sheet-backdrop" onClick={e => { if (e.target === e.currentTarget) { haptic([6]); onClose(); } }}>
-      <div
-        className="sheet"
-        ref={drag.ref}
-        onTouchStart={drag.onTouchStart}
-        onTouchMove={drag.onTouchMove}
-        onTouchEnd={drag.onTouchEnd}
-        style={{ transition: 'transform .05s' }}
-      >
-        <div className="sheet-handle"><div className="sheet-handle-bar" /></div>
-        <div className="sheet-hd">
-          <span className="sheet-title">Settings</span>
-          <button className="icon-btn" onClick={() => { haptic([6]); onClose(); }}>
-            <Icon path={PATH.closeX} size={18} />
-          </button>
-        </div>
-        <div style={{ paddingBottom: 'env(safe-area-inset-bottom, 20px)' }}>
-          <div className="settings-row">
-            <div>
-              <div className="settings-label">Gamification</div>
-              <div className="settings-sub">High-score flag, record alerts & confetti</div>
-            </div>
-            <Toggle on={settings.gamification} onChange={() => { haptic([5]); onChange('gamification', !settings.gamification); }} />
-          </div>
-          <div className="settings-row">
-            <div>
-              <div className="settings-label">Tutorial</div>
-              <div className="settings-sub">Replay the onboarding walkthrough</div>
-            </div>
-            <button className="settings-action" onClick={() => { haptic([6]); onReplayTutorial(); onClose(); }}>Replay</button>
-          </div>
-          <div className="settings-row">
-            <div>
-              <div className="settings-label">About</div>
-              <div className="settings-sub">Who made this and why</div>
-            </div>
-            <button className="settings-action" onClick={() => { haptic([6]); onClose(); onShowAbout(); }}>About</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+function SettingsPanel({onClose,settings,onChange,onReplayTutorial,onShowAbout}) {
+const drag=useSheetDismiss(onClose);
+return (
+<div className=“sheet-backdrop” onClick={e=>{if(e.target===e.currentTarget){haptic([6]);onClose();}}}>
+<div className=“sheet” ref={drag.ref} onTouchStart={drag.onTouchStart} onTouchMove={drag.onTouchMove} onTouchEnd={drag.onTouchEnd} style={{transition:‘transform .05s’}}>
+<div className="sheet-handle"><div className="sheet-handle-bar"/></div>
+<div className="sheet-hd">
+<span className="sheet-title">Settings</span>
+<button className=“icon-btn” onClick={()=>{haptic([6]);onClose();}}><Icon path={PATH.closeX} size={18}/></button>
+</div>
+<div style={{paddingBottom:‘env(safe-area-inset-bottom, 20px)’}}>
+<div className="settings-row">
+<div><div className="settings-label">Gamification</div><div className="settings-sub">High-score flag, record alerts & confetti</div></div>
+<Toggle on={settings.gamification} onChange={()=>{haptic([5]);onChange(‘gamification’,!settings.gamification);}}/>
+</div>
+<div className="settings-row">
+<div><div className="settings-label">Tutorial</div><div className="settings-sub">Replay the onboarding walkthrough</div></div>
+<button className=“settings-action” onClick={()=>{haptic([6]);onReplayTutorial();onClose();}}>Replay</button>
+</div>
+<div className="settings-row">
+<div><div className="settings-label">About</div><div className="settings-sub">Who made this and why</div></div>
+<button className=“settings-action” onClick={()=>{haptic([6]);onClose();onShowAbout();}}>About</button>
+</div>
+</div>
+</div>
+</div>
+);
 }
 
-// ── Main App ────────────────────────────────────────────────────────────────────
 function App() {
-  // ── Keyboard-avoidance: lift footer above virtual keyboard ──────────────────
-  const [footerOffset, setFooterOffset] = useState(0);
-  useEffect(() => {
-    const vv = window.visualViewport;
-    if (!vv) return;
-    let raf = null;
-    const update = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        setFooterOffset(Math.max(0, window.innerHeight - vv.height - vv.offsetTop));
-      });
-    };
-    vv.addEventListener('resize', update);
-    return () => { vv.removeEventListener('resize', update); cancelAnimationFrame(raf); };
-  }, []);
+const [footerOffset,setFooterOffset]=useState(0);
+useEffect(()=>{
+const vv=window.visualViewport; if(!vv)return;
+let raf=null;
+const update=()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>setFooterOffset(Math.max(0,window.innerHeight-vv.height-vv.offsetTop)));};
+vv.addEventListener(‘resize’,update);
+return()=>{vv.removeEventListener(‘resize’,update);cancelAnimationFrame(raf);};
+},[]);
 
-  // ── Persistent state ────────────────────────────────────────────────────────
-  const [theme,       setTheme]       = useState(() => lsGet(LS_THEME, 'dark'));
-  const [settings,    setSettings]    = useState(() => lsGet(LS_SETTINGS, { gamification: true }));
-  const [recordDrop,  setRecordDrop]  = useState(() => lsGet(LS_RECORD, 0));
-  const [showTutorial, setShowTutorial] = useState(() => !lsGet(LS_TUTORIAL, false));
+const [theme,setTheme]=useState(()=>lsGet(LS_THEME,‘dark’));
+const [settings,setSettings]=useState(()=>lsGet(LS_SETTINGS,{gamification:true}));
+const [recordDrop,setRecordDrop]=useState(()=>lsGet(LS_RECORD,0));
+const [showTutorial,setShowTutorial]=useState(()=>!lsGet(LS_TUTORIAL,false));
+const [targetInput,setTargetInput]=useState(‘200’);
+const [billsMode,setBillsMode]=useState(‘count’);
+const [coinsMode,setCoinsMode]=useState(‘count’);
+const [cash,setCash]=useState(EMPTY_CASH);
+const [page,setPage]=useState(1);
+const [drawerOpen,setDrawerOpen]=useState(true);
+const [showHistory,setShowHistory]=useState(false);
+const [showSettings,setShowSettings]=useState(false);
+const [showAbout,setShowAbout]=useState(false);
+const [showResetConfirm,setShowResetConfirm]=useState(false);
+const [showRecord,setShowRecord]=useState(null);
 
-  // ── Ephemeral state ─────────────────────────────────────────────────────────
-  const [targetInput, setTargetInput] = useState('200');
-  const [billsMode,   setBillsMode]   = useState('count');
-  const [coinsMode,   setCoinsMode]   = useState('count');
-  const [cash,        setCash]        = useState(EMPTY_CASH);
-  const [page,        setPage]        = useState(1); // 1 = count, 2 = drop result
-  const [drawerOpen,  setDrawerOpen]  = useState(true);
-  const [showHistory, setShowHistory] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
-  const [showAbout,   setShowAbout]   = useState(false);
-  const [showResetConfirm, setShowResetConfirm] = useState(false);
-  const [showRecord,  setShowRecord]  = useState(null);
+useEffect(()=>{document.documentElement.setAttribute(‘data-theme’,theme);lsSet(LS_THEME,theme);},[theme]);
 
-  // ── Sync theme to DOM ───────────────────────────────────────────────────────
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    lsSet(LS_THEME, theme);
-  }, [theme]);
+const TARGET=Math.max(0,Number(targetInput)||0);
+const totalBillsCents=BILL_DENOMS.reduce((s,d)=>s+toCents(rowValue(cash[String(d)],d,billsMode)),0);
+const totalCoinsCents=COIN_DENOMS.reduce((s,c)=>s+toCents(rowValue(cash[c.id],c.val,coinsMode)),0);
+const totalCents=totalBillsCents+totalCoinsCents;
+const totalCash=fromCents(totalCents);
+const overageCents=totalCents-toCents(TARGET);
+const dropAmount=fromCents(Math.max(0,overageCents));
+const dropDetails=computeDrop(cash,billsMode,dropAmount,TARGET);
+const actualDropTotal=dropDetails.reduce((s,i)=>s+i.value,0);
+const remainingCents=totalCents-toCents(actualDropTotal);
+const remainingDrawer=fromCents(remainingCents);
+const undroppableCents=overageCents>0?toCents(dropAmount)-toCents(actualDropTotal):0;
+const over=totalCash>=TARGET;
 
-  // ── Derived totals ──────────────────────────────────────────────────────────
-  const TARGET = Math.max(0, Number(targetInput) || 0);
+const toggleTheme=()=>{haptic([5]);setTheme(t=>t===‘dark’?‘light’:‘dark’);};
+const changeSetting=(key,val)=>setSettings(prev=>{const next={…prev,[key]:val};lsSet(LS_SETTINGS,next);return next;});
+const handleBillsModeChange=useCallback(m=>{setCash(prev=>convertCash(prev,billsMode,m,BILL_DENOMS.map(d=>({id:String(d),val:d}))));setBillsMode(m);},[billsMode]);
+const handleCoinsModeChange=useCallback(m=>{setCash(prev=>convertCash(prev,coinsMode,m,COIN_DENOMS));setCoinsMode(m);},[coinsMode]);
+const handleManualInput=useCallback((id,val)=>{if(val===’’||/^\d*.?\d*$/.test(val))setCash(prev=>({…prev,[id]:val}));},[]);
+const handleStep=useCallback((id,delta,denom,mode)=>{
+setCash(prev=>{
+const cur=Number(prev[id])||0, step=mode===‘count’?1:denom;
+const next=Math.max(0,cur+delta*step);
+const val=mode===‘value’?parseFloat(next.toFixed(2)):Math.round(next);
+return {…prev,[id]:val===0?’’:String(val)};
+});
+},[]);
+const clearRow=useCallback(id=>setCash(prev=>({…prev,[id]:’’})),[]);
 
-  const totalBillsCents = BILL_DENOMS.reduce((sum, d) =>
-    sum + toCents(rowValue(cash[String(d)], d, billsMode)), 0);
+const goToResult=()=>{
+haptic([10,30,15]);
+pushHistory({ts:Date.now(),totalCash,dropped:actualDropTotal,remaining:remainingDrawer,target:TARGET,dropDetails});
+if(settings.gamification&&actualDropTotal>0&&actualDropTotal>recordDrop){
+lsSet(LS_RECORD,actualDropTotal);setRecordDrop(actualDropTotal);
+setTimeout(()=>{launchConfetti();setShowRecord(actualDropTotal);},400);
+}
+setPage(2);setTimeout(()=>window.scrollTo({top:0,behavior:‘smooth’}),10);
+};
+const goToCount=()=>{haptic([6]);setPage(1);setTimeout(()=>window.scrollTo({top:0,behavior:‘smooth’}),10);};
+const doReset=()=>{haptic([8,60,20]);setCash(EMPTY_CASH);setPage(1);setShowResetConfirm(false);};
+const billStep=useCallback((id,d,denom)=>handleStep(id,d,denom,billsMode),[handleStep,billsMode]);
+const coinStep=useCallback((id,d,denom)=>handleStep(id,d,denom,coinsMode),[handleStep,coinsMode]);
 
-  const totalCoinsCents = COIN_DENOMS.reduce((sum, c) =>
-    sum + toCents(rowValue(cash[c.id], c.val, coinsMode)), 0);
+return (
+<div style={{minHeight:‘100vh’}}>
+<header className="gh-header">
+<div className="gh-header-brand">
+<div className="gh-logo"><i className=“fa-solid fa-apple-whole” style={{fontSize:‘22px’}}/></div>
+<div className="gh-header-title">Apple-Counter</div>
+</div>
+<div className="gh-header-actions" id="header-actions">
+<button className="icon-btn" onClick={toggleTheme} aria-label="Toggle theme"><Icon path={theme===‘dark’?PATH.sun:PATH.moon} size={18}/></button>
+<button className=“icon-btn” onClick={()=>{haptic([6]);setShowHistory(true);}} aria-label=“History”><Icon path={PATH.history} size={18}/></button>
+<button className=“icon-btn” onClick={()=>{haptic([6]);setShowSettings(true);}} aria-label=“Settings”><Icon path={PATH.settings} size={18}/></button>
+<button className=“icon-btn” onClick={()=>{haptic([5]);setShowResetConfirm(true);}} aria-label=“Reset”><Icon path={PATH.refresh} size={18}/></button>
+</div>
+</header>
 
-  const totalCents   = totalBillsCents + totalCoinsCents;
-  const totalCash    = fromCents(totalCents);
-  const overageCents = totalCents - toCents(TARGET);
-  const dropAmount   = fromCents(Math.max(0, overageCents));
-
-  const dropDetails      = computeDrop(cash, billsMode, dropAmount, TARGET);
-  const actualDropTotal  = dropDetails.reduce((s, i) => s + i.value, 0);
-  const remainingCents   = totalCents - toCents(actualDropTotal);
-  const remainingDrawer  = fromCents(remainingCents);
-  const undroppableCents = overageCents > 0
-    ? toCents(dropAmount) - toCents(actualDropTotal)
-    : 0;
-
-  const over = totalCash >= TARGET;
-
-  // ── Actions ─────────────────────────────────────────────────────────────────
-  const toggleTheme = () => { haptic([5]); setTheme(t => t === 'dark' ? 'light' : 'dark'); };
-
-  const changeSetting = (key, val) => {
-    setSettings(prev => {
-      const next = { ...prev, [key]: val };
-      lsSet(LS_SETTINGS, next);
-      return next;
-    });
-  };
-
-  const handleBillsModeChange = useCallback(m => {
-    setCash(prev => convertCash(prev, billsMode, m, BILL_DENOMS.map(d => ({ id: String(d), val: d }))));
-    setBillsMode(m);
-  }, [billsMode]);
-
-  const handleCoinsModeChange = useCallback(m => {
-    setCash(prev => convertCash(prev, coinsMode, m, COIN_DENOMS));
-    setCoinsMode(m);
-  }, [coinsMode]);
-
-  const handleManualInput = useCallback((id, val) => {
-    if (val === '' || /^\d*\.?\d*$/.test(val)) setCash(prev => ({ ...prev, [id]: val }));
-  }, []);
-
-  /**
-   * Step a denom by `delta` units (always in count-space).
-   * For 'value' mode: convert delta×denom to dollars.
-   */
-  const handleStep = useCallback((id, delta, denom, mode) => {
-    setCash(prev => {
-      const cur  = Number(prev[id]) || 0;
-      const step = mode === 'count' ? 1 : denom;
-      const next = Math.max(0, cur + delta * step);
-      const val  = mode === 'value'
-        ? parseFloat(next.toFixed(2))
-        : Math.round(next);
-      return { ...prev, [id]: val === 0 ? '' : String(val) };
-    });
-  }, []);
-
-  const clearRow = useCallback(id => setCash(prev => ({ ...prev, [id]: '' })), []);
-
-  // history save is done once when navigating to page 2, not in an effect
-  const goToResult = () => {
-    haptic([10, 30, 15]);
-
-    const entry = {
-      ts: Date.now(),
-      totalCash,
-      dropped: actualDropTotal,
-      remaining: remainingDrawer,
-      target: TARGET,
-      dropDetails,
-    };
-    pushHistory(entry);
-
-    if (settings.gamification && actualDropTotal > 0 && actualDropTotal > recordDrop) {
-      lsSet(LS_RECORD, actualDropTotal);
-      setRecordDrop(actualDropTotal);
-      setTimeout(() => { launchConfetti(); setShowRecord(actualDropTotal); }, 400);
-    }
-
-    setPage(2);
-    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 10);
-  };
-
-  const goToCount = () => {
-    haptic([6]);
-    setPage(1);
-    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 10);
-  };
-
-  const doReset = () => {
-    haptic([8, 60, 20]);
-    setCash(EMPTY_CASH);
-    setPage(1);
-    setShowResetConfirm(false);
-  };
-
-  // ── Bill step handler (closes over current mode) ───────────────────────────
-  const billStep  = useCallback((id, d, denom) => handleStep(id, d, denom, billsMode),  [handleStep, billsMode]);
-  const coinStep  = useCallback((id, d, denom) => handleStep(id, d, denom, coinsMode),  [handleStep, coinsMode]);
-
-  // ── Render ──────────────────────────────────────────────────────────────────
-  return (
-    <div style={{ minHeight: '100vh' }}>
-      <header className="gh-header">
-        <div className="gh-header-brand">
-          <div className="gh-logo">
-            <i className="fa-solid fa-apple-whole" style={{ fontSize: '22px' }} />
-          </div>
-          <div className="gh-header-title">Apple-Counter</div>
-        </div>
-        <div className="gh-header-actions" id="header-actions">
-          <button className="icon-btn" onClick={toggleTheme} aria-label="Toggle theme">
-            <Icon path={theme === 'dark' ? PATH.sun : PATH.moon} size={18} />
-          </button>
-          <button className="icon-btn" onClick={() => { haptic([6]); setShowHistory(true); }} aria-label="History">
-            <Icon path={PATH.history} size={18} />
-          </button>
-          <button className="icon-btn" onClick={() => { haptic([6]); setShowSettings(true); }} aria-label="Settings">
-            <Icon path={PATH.settings} size={18} />
-          </button>
-          <button className="icon-btn" onClick={() => { haptic([5]); setShowResetConfirm(true); }} aria-label="Reset">
-            <Icon path={PATH.refresh} size={18} />
-          </button>
-        </div>
-      </header>
-
-      <main className="main-content">
-        {page === 1 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {/* Bills card */}
-            <div className="gh-card" id="bills-card">
-              <div className="gh-card-header">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span className="section-label">Bills</span>
-                  <span className="badge">${fromCents(totalBillsCents).toFixed(2)}</span>
-                </div>
-                <ModeToggle mode={billsMode} onChange={handleBillsModeChange} />
-              </div>
-              <div className="section-body">
-                {BILL_DENOMS.map(d => (
-                  <BillRow
-                    key={d}
-                    id={String(d)} label={`$${d}`} denom={d}
-                    inputMode={billsMode} value={cash[String(d)]}
-                    onManualInput={handleManualInput}
-                    onStep={billStep}
-                    onClear={clearRow}
-                  />
-                ))}
-              </div>
+```
+  <main className="main-content">
+    {page===1&&(
+      <div style={{display:'flex',flexDirection:'column',gap:'12px'}}>
+        <div className="gh-card" id="bills-card">
+          <div className="gh-card-header">
+            <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
+              <span className="section-label">Bills</span>
+              <span className="badge">${fromCents(totalBillsCents).toFixed(2)}</span>
             </div>
-
-            {/* Coins card */}
-            <div className="gh-card" id="coins-card">
-              <div className="gh-card-header">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span className="section-label">Coins</span>
-                  <span className="badge">${fromCents(totalCoinsCents).toFixed(2)}</span>
-                </div>
-                <ModeToggle mode={coinsMode} onChange={handleCoinsModeChange} />
-              </div>
-              <div className="section-body">
-                {COIN_DENOMS.map(c => (
-                  <CoinRow
-                    key={c.id}
-                    id={c.id} label={c.label} denom={c.val}
-                    rollCount={c.roll} inputMode={coinsMode}
-                    value={cash[c.id]}
-                    onManualInput={handleManualInput}
-                    onStep={coinStep}
-                    onClear={clearRow}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <div className="hold-hint">Hold − to clear a row</div>
+            <ModeToggle mode={billsMode} onChange={handleBillsModeChange}/>
           </div>
-        )}
+          <div className="section-body">
+            {BILL_DENOMS.map(d=>(
+              <BillRow key={d} id={String(d)} label={`$${d}`} denom={d}
+                inputMode={billsMode} value={cash[String(d)]}
+                onManualInput={handleManualInput} onStep={billStep} onClear={clearRow}/>
+            ))}
+          </div>
+        </div>
 
-        {page === 2 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', paddingBottom: '16px' }}>
-            <button className="back-btn" onClick={goToCount}>
-              <Icon path={PATH.arrowL} size={18} /> Back to edit
-            </button>
+        <div className="gh-card" id="coins-card">
+          <div className="gh-card-header">
+            <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
+              <span className="section-label">Coins</span>
+              <span className="badge">${fromCents(totalCoinsCents).toFixed(2)}</span>
+            </div>
+            <ModeToggle mode={coinsMode} onChange={handleCoinsModeChange}/>
+          </div>
+          <div className="section-body">
+            {COIN_DENOMS.map(c=>(
+              <CoinRow key={c.id} id={c.id} label={c.label} denom={c.val}
+                rollCount={c.roll} inputMode={coinsMode} value={cash[c.id]}
+                onManualInput={handleManualInput} onStep={coinStep} onClear={clearRow}/>
+            ))}
+          </div>
+        </div>
+        <div className="hold-hint">Hold − to clear a row</div>
+      </div>
+    )}
 
-            {/* Drop result */}
-            <div className="drop-hero">
-              <div className="drop-hero-top">
-                <div className="drop-eyebrow">Drop Safe</div>
-                <div className="drop-amount">${actualDropTotal.toFixed(2)}</div>
-                <div className="drop-sub">
-                  from ${totalCash.toFixed(2)} counted · target ${TARGET.toFixed(2)}
-                </div>
-              </div>
-              <div style={{ padding: '0 14px 14px' }}>
-                <div className="pull-label" style={{ marginTop: '14px' }}>Pull these bills</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  {dropDetails.length > 0 ? dropDetails.map(item => (
-                    <div key={item.label} className="pull-row">
-                      <div className="pull-row-left">
-                        <div className="pull-count">{item.count}</div>
-                        <span style={{ fontSize: '12px', color: 'var(--t2)' }}>×</span>
-                        <span className="pull-denom">{item.label}</span>
-                      </div>
-                      <span className="pull-value">${item.value.toFixed(2)}</span>
-                    </div>
-                  )) : (
-                    <div className="empty-state">
-                      <div className="empty-icon"><Icon path={PATH.check} size={22} /></div>
-                      <div style={{ fontWeight: 700, fontSize: '16px', color: 'var(--t0)', marginBottom: '6px' }}>
-                        No drop required
-                      </div>
-                      <div style={{ fontSize: '13px', color: 'var(--t1)' }}>
-                        Drawer is at or below target
-                      </div>
-                    </div>
-                  )}
-                </div>
-                {undroppableCents > 0 && (
-                  <div className="warn-banner">
-                    <div className="warn-dot">!</div>
-                    <div>
-                      <div className="warn-title">${fromCents(undroppableCents).toFixed(2)} couldn't be dropped</div>
-                      <div className="warn-body">No matching bills — this overage stays in the drawer.</div>
-                    </div>
+    {page===2&&(
+      <div style={{display:'flex',flexDirection:'column',gap:'12px',paddingBottom:'16px'}}>
+        <button className="back-btn" onClick={goToCount}><Icon path={PATH.arrowL} size={18}/> Back to edit</button>
+        <div className="drop-hero">
+          <div className="drop-hero-top">
+            <div className="drop-eyebrow">Drop Safe</div>
+            <div className="drop-amount">${actualDropTotal.toFixed(2)}</div>
+            <div className="drop-sub">from ${totalCash.toFixed(2)} counted · target ${TARGET.toFixed(2)}</div>
+          </div>
+          <div style={{padding:'0 14px 14px'}}>
+            <div className="pull-label" style={{marginTop:'14px'}}>Pull these bills</div>
+            <div style={{display:'flex',flexDirection:'column',gap:'6px'}}>
+              {dropDetails.length>0?dropDetails.map(item=>(
+                <div key={item.label} className="pull-row">
+                  <div className="pull-row-left">
+                    <div className="pull-count">{item.count}</div>
+                    <span style={{fontSize:'12px',color:'var(--t2)'}}>×</span>
+                    <span className="pull-denom">{item.label}</span>
                   </div>
-                )}
-              </div>
+                  <span className="pull-value">${item.value.toFixed(2)}</span>
+                </div>
+              )):(
+                <div className="empty-state">
+                  <div className="empty-icon"><Icon path={PATH.check} size={22}/></div>
+                  <div style={{fontWeight:700,fontSize:'16px',color:'var(--t0)',marginBottom:'6px'}}>No drop required</div>
+                  <div style={{fontSize:'13px',color:'var(--t1)'}}>Drawer is at or below target</div>
+                </div>
+              )}
             </div>
-
-            {/* Drawer breakdown */}
-            <div className="drawer-card">
-              <div className="drawer-header">
+            {undroppableCents>0&&(
+              <div className="warn-banner">
+                <div className="warn-dot">!</div>
                 <div>
-                  <div style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.7px', color: 'var(--t1)', marginBottom: '4px' }}>
-                    Leave in Drawer
-                  </div>
-                  <div className="drawer-total">${remainingDrawer.toFixed(2)}</div>
+                  <div className="warn-title">${fromCents(undroppableCents).toFixed(2)} couldn't be dropped</div>
+                  <div className="warn-body">No matching bills — this overage stays in the drawer.</div>
                 </div>
-                <button className="breakdown-btn" onClick={() => { haptic([5]); setDrawerOpen(v => !v); }}>
-                  Breakdown {drawerOpen
-                    ? <Icon path={PATH.chevU} size={16} />
-                    : <Icon path={PATH.chevD} size={16} />}
-                </button>
               </div>
-              {drawerOpen && (
-                <div className="breakdown-body">
-                  {/* Bills */}
-                  <div style={{ marginBottom: '16px' }}>
-                    <div className="breakdown-section-title">
-                      <span>Bills</span>
-                      <span className="breakdown-subtotal">
-                        ${fromCents(totalBillsCents - toCents(actualDropTotal)).toFixed(2)}
-                      </span>
-                    </div>
-                    {(() => {
-                      const rows = BILL_DENOMS.map(d => {
-                        const sv   = rowValue(cash[String(d)], d, billsMode);
-                        const drop = dropDetails.find(i => i.denom === d);
-                        const fv   = sv - (drop ? drop.value : 0);
-                        const fc   = Math.round(fv / d);
-                        if (fc <= 0) return null;
-                        return (
-                          <div key={d} className="breakdown-row">
-                            <div className="breakdown-left">
-                              <div className="chip-bill">${d}</div>
-                              <span className="breakdown-count">× {fc}</span>
-                            </div>
-                            <span className="breakdown-val">${fv.toFixed(2)}</span>
-                          </div>
-                        );
-                      }).filter(Boolean);
-                      return rows.length > 0 ? rows
-                        : <div className="breakdown-empty">No bills remaining</div>;
-                    })()}
-                  </div>
-                  {/* Coins */}
-                  <div>
-                    <div className="breakdown-section-title">
-                      <span>Coins</span>
-                      <span className="breakdown-subtotal">${fromCents(totalCoinsCents).toFixed(2)}</span>
-                    </div>
-                    {(() => {
-                      const rows = COIN_DENOMS.map(c => {
-                        const val   = rowValue(cash[c.id], c.val, coinsMode);
-                        const count = Math.round(fromCents(toCents(val)) / c.val);
-                        if (count <= 0) return null;
-                        return (
-                          <div key={c.id} className="breakdown-row">
-                            <div className="breakdown-left">
-                              <div className="chip-coin">{c.label}</div>
-                              <span className="breakdown-count">× {count}</span>
-                            </div>
-                            <span className="breakdown-val">${val.toFixed(2)}</span>
-                          </div>
-                        );
-                      }).filter(Boolean);
-                      return rows.length > 0 ? rows
-                        : <div className="breakdown-empty">No coins remaining</div>;
-                    })()}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-      </main>
-
-      {page === 1 && (
-        <div className="sticky-footer" style={{ transform: `translateY(-${footerOffset}px)` }}>
-          <div className="footer-row">
-            <div style={{ flex: 1 }}>
-              <div className="footer-total-label">Total Counted</div>
-              <AnimatedTotal
-                value={`$${totalCash.toFixed(2)}`}
-                className={`footer-total-value${over ? ' over' : ''}`}
-              />
-            </div>
-            <button id="calc-btn" className="btn-primary" onClick={goToResult}>
-              Calculate <Icon path={PATH.arrowR} size={18} />
-            </button>
-          </div>
-          <div className="target-row" id="progress-bar">
-            <div className="target-meta">
-              <div className="target-label-group">
-                Target $
-                <input
-                  type="number" className="target-input"
-                  value={targetInput}
-                  onChange={e => setTargetInput(e.target.value)}
-                />
-              </div>
-              {totalCash > 0 && (
-                <span className={`target-status${over ? ' over' : ' under'}`}>
-                  {over
-                    ? `+$${(totalCash - TARGET).toFixed(2)} over`
-                    : `-$${(TARGET - totalCash).toFixed(2)} short`}
-                </span>
-              )}
-            </div>
-            <ProgressBar
-              over={over} target={TARGET} totalCash={totalCash}
-              recordDrop={recordDrop} gamification={settings.gamification}
-            />
+            )}
           </div>
         </div>
-      )}
 
-      {showHistory && (
-        <HistoryPanel
-          onClose={() => setShowHistory(false)}
-          onRecordCleared={() => { lsSet(LS_RECORD, 0); setRecordDrop(0); }}
-        />
-      )}
-      {showSettings && (
-        <SettingsPanel
-          onClose={() => setShowSettings(false)}
-          settings={settings}
-          onChange={changeSetting}
-          onReplayTutorial={() => { lsSet(LS_TUTORIAL, false); setShowTutorial(true); }}
-          onShowAbout={() => setShowAbout(true)}
-        />
-      )}
-      {showRecord  && <NewRecord amount={showRecord} onDismiss={() => setShowRecord(null)} />}
-      {showTutorial && <Tutorial onDone={() => { lsSet(LS_TUTORIAL, true); setShowTutorial(false); }} />}
-      {showAbout   && <AboutModal onClose={() => setShowAbout(false)} />}
-      {showResetConfirm && (
-        <ConfirmModal
-          title="Reset Counter?"
-          body="This will clear all your current counts and start over. Your drop history will be kept."
-          confirmLabel="Yes, Reset"
-          onConfirm={doReset}
-          onCancel={() => setShowResetConfirm(false)}
-        />
-      )}
+        <div className="drawer-card">
+          <div className="drawer-header">
+            <div>
+              <div style={{fontSize:'10px',fontWeight:700,textTransform:'uppercase',letterSpacing:'.7px',color:'var(--t1)',marginBottom:'4px'}}>Leave in Drawer</div>
+              <div className="drawer-total">${remainingDrawer.toFixed(2)}</div>
+            </div>
+            <button className="breakdown-btn" onClick={()=>{haptic([5]);setDrawerOpen(v=>!v);}}>
+              Breakdown {drawerOpen?<Icon path={PATH.chevU} size={16}/>:<Icon path={PATH.chevD} size={16}/>}
+            </button>
+          </div>
+          {drawerOpen&&(
+            <div className="breakdown-body">
+              <div style={{marginBottom:'16px'}}>
+                <div className="breakdown-section-title">
+                  <span>Bills</span>
+                  <span className="breakdown-subtotal">${fromCents(totalBillsCents-toCents(actualDropTotal)).toFixed(2)}</span>
+                </div>
+                {(()=>{
+                  const rows=BILL_DENOMS.map(d=>{
+                    const sv=rowValue(cash[String(d)],d,billsMode);
+                    const drop=dropDetails.find(i=>i.denom===d);
+                    const fv=sv-(drop?drop.value:0), fc=Math.round(fv/d);
+                    if(fc<=0)return null;
+                    return (<div key={d} className="breakdown-row"><div className="breakdown-left"><div className="chip-bill">${d}</div><span className="breakdown-count">× {fc}</span></div><span className="breakdown-val">${fv.toFixed(2)}</span></div>);
+                  }).filter(Boolean);
+                  return rows.length>0?rows:<div className="breakdown-empty">No bills remaining</div>;
+                })()}
+              </div>
+              <div>
+                <div className="breakdown-section-title">
+                  <span>Coins</span>
+                  <span className="breakdown-subtotal">${fromCents(totalCoinsCents).toFixed(2)}</span>
+                </div>
+                {(()=>{
+                  const rows=COIN_DENOMS.map(c=>{
+                    const val=rowValue(cash[c.id],c.val,coinsMode);
+                    const count=Math.round(fromCents(toCents(val))/c.val);
+                    if(count<=0)return null;
+                    return (<div key={c.id} className="breakdown-row"><div className="breakdown-left"><div className="chip-coin">{c.label}</div><span className="breakdown-count">× {count}</span></div><span className="breakdown-val">${val.toFixed(2)}</span></div>);
+                  }).filter(Boolean);
+                  return rows.length>0?rows:<div className="breakdown-empty">No coins remaining</div>;
+                })()}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    )}
+  </main>
+
+  {page===1&&(
+    <div className="sticky-footer" style={{transform:`translateY(-${footerOffset}px)`}}>
+      <div className="footer-row">
+        <div style={{flex:1}}>
+          <div className="footer-total-label">Total Counted</div>
+          <AnimatedTotal value={`$${totalCash.toFixed(2)}`} className={`footer-total-value${over?' over':''}`}/>
+        </div>
+        <button id="calc-btn" className="btn-primary" onClick={goToResult}>
+          Calculate <Icon path={PATH.arrowR} size={18}/>
+        </button>
+      </div>
+      <div className="target-row" id="progress-bar">
+        <div className="target-meta">
+          <div className="target-label-group">
+            Target $
+            <input type="number" className="target-input" value={targetInput} onChange={e=>setTargetInput(e.target.value)}/>
+          </div>
+          {totalCash>0&&(
+            <span className={`target-status${over?' over':' under'}`}>
+              {over?`+$${(totalCash-TARGET).toFixed(2)} over`:`-$${(TARGET-totalCash).toFixed(2)} short`}
+            </span>
+          )}
+        </div>
+        <ProgressBar over={over} target={TARGET} totalCash={totalCash} recordDrop={recordDrop} gamification={settings.gamification}/>
+      </div>
     </div>
-  );
+  )}
+
+  {showHistory&&<HistoryPanel onClose={()=>setShowHistory(false)} onRecordCleared={()=>{lsSet(LS_RECORD,0);setRecordDrop(0);}}/>}
+  {showSettings&&<SettingsPanel onClose={()=>setShowSettings(false)} settings={settings} onChange={changeSetting} onReplayTutorial={()=>{lsSet(LS_TUTORIAL,false);setShowTutorial(true);}} onShowAbout={()=>setShowAbout(true)}/>}
+  {showRecord&&<NewRecord amount={showRecord} onDismiss={()=>setShowRecord(null)}/>}
+  {showTutorial&&<Tutorial onDone={()=>{lsSet(LS_TUTORIAL,true);setShowTutorial(false);}}/>}
+  {showAbout&&<AboutModal onClose={()=>setShowAbout(false)}/>}
+  {showResetConfirm&&<ConfirmModal title="Reset Counter?" body="This will clear all your current counts and start over. Your drop history will be kept." confirmLabel="Yes, Reset" onConfirm={doReset} onCancel={()=>setShowResetConfirm(false)}/>}
+</div>
+```
+
+);
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+ReactDOM.createRoot(document.getElementById(‘root’)).render(<App/>);
 </script>
 
 <script>
 if ('serviceWorker' in navigator) {
-  const sw = `
-self.addEventListener('install', e => e.waitUntil(
-  caches.open('ac-v2').then(c => c.addAll(['/']))
-));
-self.addEventListener('fetch', e => e.respondWith(
-  caches.match(e.request).then(r => r || fetch(e.request))
-));`;
+  const sw = `self.addEventListener('install',e=>e.waitUntil(caches.open('ac-v2').then(c=>c.addAll(['/']))));self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));`;
   const blob = new Blob([sw], { type: 'text/javascript' });
   navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
 }
 </script>
+
 </body>
 </html>
