@@ -101,7 +101,7 @@ input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-ou
 input[type="number"]{-moz-appearance:textfield}
 body,*{-ms-overflow-style:none;scrollbar-width:none}
 ::-webkit-scrollbar{display:none}
-body{font-family:var(--font);color:var(--t0);overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent;min-height:100vh;min-height:100dvh;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{font-family:var(--font);color:var(--t0);overscroll-behavior:none;-webkit-tap-highlight-color:transparent;min-height:100vh;min-height:100dvh;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 button,input{-webkit-tap-highlight-color:transparent}
 button{touch-action:manipulation}
 button:focus,input:focus,:focus-visible{outline:none}
@@ -117,15 +117,15 @@ svg{display:inline-block;vertical-align:middle}
 @keyframes skFadeIn{from{opacity:0}to{opacity:1}}
 
 /* ─── HEADER ────────────────────────────────────────────────────────────────── */
-.gh-header{background:var(--bg1);border-bottom:1px solid var(--bd);padding:12px 16px;padding-top:calc(12px + env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:30}
+.gh-header{background:var(--bg1);border-bottom:1px solid var(--bd);padding:12px 16px;padding-top:calc(12px + env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;position:fixed;top:0;left:0;right:0;z-index:30;will-change:transform;transform:translateZ(0)}
 body::before{content:'';position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top);background:var(--bg1);z-index:31}
 .gh-header-brand{display:flex;align-items:center;gap:10px;min-width:0}
 .gh-logo{width:34px;height:34px;background:var(--brand);border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
 .gh-header-title{font-size:16px;font-weight:700;color:var(--t0);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gh-header-actions{display:flex;gap:6px;flex-shrink:0}
-.icon-btn{width:40px;height:40px;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t1);font-size:0;transition:background-color .15s ease,color .15s ease,transform .12s ease}
+.icon-btn{width:48px;height:48px;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t1);font-size:0;transition:background-color .15s ease,color .15s ease,transform .15s cubic-bezier(.34,1.56,.64,1),box-shadow .15s ease}
 .icon-btn:hover{background:var(--bg3);color:var(--t0)}
-.icon-btn:active{transform:scale(.93);transition:transform 0s}
+.icon-btn:active{transform:scale(.84);box-shadow:none;transition:transform 0s,box-shadow 0s}
 
 /* ─── COLLAPSIBLE CARD ──────────────────────────────────────────────────────── */
 .gh-card{background:var(--bg1);border:1px solid var(--bd);border-radius:var(--r-lg);overflow:hidden}
@@ -196,23 +196,25 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:env(safe-area
   cursor:pointer;color:var(--t1);
   touch-action:manipulation;user-select:none;-webkit-user-select:none;
   position:relative;
+  transition:background-color .15s ease,color .15s ease,transform .12s cubic-bezier(.34,1.56,.64,1),box-shadow .12s ease;
 }
 .step-btn::after{
   content:'';position:absolute;
   inset:-6px;          /* expands invisible tap area 6px beyond visual bounds */
   border-radius:calc(var(--r-sm) + 6px);
 }
-.step-btn:active{transform:scale(.85);background:var(--bg3);transition:transform 0s}
+.step-btn:active{transform:scale(.82);background:var(--bg3);box-shadow:none;transition:transform 0s,box-shadow 0s,background-color 0s}
 .step-btn.plus.active{border-color:var(--green-bd);color:var(--green)}
 .step-btn.repeating{box-shadow:0 0 0 2px var(--brand-bd)}
-.roll-btn{height:48px;min-width:46px;max-width:58px;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;color:var(--brand);padding:0 6px;touch-action:manipulation}
-.roll-btn:active{transform:scale(.9);transition:transform 0s}
+.roll-btn{height:48px;min-width:46px;max-width:58px;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;color:var(--brand);padding:0 6px;touch-action:manipulation;transition:background-color .15s ease,transform .15s cubic-bezier(.34,1.56,.64,1),box-shadow .15s ease}
+.roll-btn:active{transform:scale(.84);box-shadow:none;transition:transform 0s,box-shadow 0s}
 .roll-btn-icons{display:flex;align-items:center;gap:2px}
 .roll-btn-label{font-size:9px;font-weight:800;opacity:.75;letter-spacing:.3px;white-space:nowrap}
 @media(max-width:380px){.roll-btn-label{display:none}}
 
-/* ─── FOOTER — Calculate is now full-width at the bottom ───────────────────── */
-.sticky-footer{position:fixed;bottom:0;left:0;right:0;background:var(--bg1);border-top:1px solid var(--bd);padding:10px 16px calc(10px + env(safe-area-inset-bottom));z-index:20;box-shadow:0 -4px 20px rgba(0,0,0,.3)}
+/* Hide footer while keyboard is up — avoids fighting iOS visualViewport timing */
+.sticky-footer{position:fixed;bottom:0;left:0;right:0;background:var(--bg1);border-top:1px solid var(--bd);padding:10px 16px calc(10px + env(safe-area-inset-bottom));z-index:20;box-shadow:0 -4px 20px rgba(0,0,0,.3);will-change:transform;transform:translateZ(0);transition:opacity .18s ease,transform .22s cubic-bezier(.4,0,.2,1)}
+.sticky-footer.keyboard-up{opacity:0;transform:translateY(100%);pointer-events:none}
 html[data-theme="light"] .sticky-footer{box-shadow:0 -4px 20px rgba(31,35,40,.12)}
 /* Total + target row still side-by-side */
 .footer-top-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
@@ -228,10 +230,10 @@ html[data-theme="light"] .sticky-footer{box-shadow:0 -4px 20px rgba(31,35,40,.12
   display:flex;align-items:center;justify-content:center;gap:8px;
   margin-top:10px;
   box-shadow:0 2px 8px rgba(35,134,54,.25);
-  transition:background-color .15s ease,transform .1s ease,box-shadow .15s ease;
+  transition:background-color .15s ease,transform .15s cubic-bezier(.34,1.56,.64,1),box-shadow .15s ease;
 }
-.btn-calc:hover{background:#2ea043}
-.btn-calc:active{transform:scale(.98);transition:transform 0s;background:#1e7a30}
+.btn-calc:hover{background:#2ea043;box-shadow:0 4px 14px rgba(35,134,54,.38)}
+.btn-calc:active{transform:scale(.97);box-shadow:0 1px 4px rgba(35,134,54,.15);transition:transform 0s,box-shadow 0s;background:#1e7a30}
 html[data-theme="light"] .btn-calc{background:#1f883d;border-color:rgba(31,136,61,.4)}
 html[data-theme="light"] .btn-calc:hover{background:#1a7f37}
 .target-row{margin-top:0}
@@ -292,9 +294,9 @@ html[data-theme="light"] .btn-calc:hover{background:#1a7f37}
 .drawer-card{background:var(--bg1);border:1px solid var(--bd);border-radius:var(--r-lg);overflow:hidden}
 .drawer-header{background:var(--bg2);border-bottom:1px solid var(--bd);padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
 .drawer-total{font-size:32px;font-weight:800;color:var(--t0);font-variant-numeric:tabular-nums;line-height:1}
-.breakdown-btn{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--t1);background:var(--bg1);border:1px solid var(--bd);border-radius:var(--r-sm);padding:8px 14px;min-height:44px;cursor:pointer;transition:background-color .15s ease,color .15s ease,transform .1s ease,border-color .15s ease}
+.breakdown-btn{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--t1);background:var(--bg1);border:1px solid var(--bd);border-radius:var(--r-sm);padding:8px 14px;min-height:44px;cursor:pointer;transition:background-color .15s ease,color .15s ease,transform .15s cubic-bezier(.34,1.56,.64,1),border-color .15s ease}
 .breakdown-btn:hover{background:var(--bg3);color:var(--t0)}
-.breakdown-btn:active{transform:scale(.95);transition:transform 0s}
+.breakdown-btn:active{transform:scale(.93);transition:transform 0s}
 .breakdown-chev{transition:transform .25s cubic-bezier(.4,0,.2,1)}
 .breakdown-chev.open{transform:rotate(180deg)}
 /* animated collapse wrapper */
@@ -489,7 +491,7 @@ html[data-theme="light"] .sheet-backdrop{background:rgba(0,0,0,.3)}
 
 /* ─── MISC ──────────────────────────────────────────────────────────────────── */
 /* Footer is taller now (full-width calc button adds ~62px) */
-.main-content{max-width:480px;margin:0 auto;padding:14px 14px 280px}
+.main-content{max-width:480px;margin:0 auto;padding:14px 14px 280px;padding-top:calc(58px + env(safe-area-inset-top) + 14px)}
 .section-body{padding:8px;display:flex;flex-direction:column;gap:4px}
 .hold-hint{text-align:center;font-size:11px;color:var(--t2);padding-bottom:4px;letter-spacing:.3px}
 .toast{
@@ -522,10 +524,10 @@ html[data-theme="light"] .sheet-backdrop{background:rgba(0,0,0,.3)}
   color:var(--t1);font-size:15px;font-weight:600;
   border-radius:var(--r-md);cursor:pointer;
   display:flex;align-items:center;justify-content:center;gap:8px;
-  transition:background-color .15s ease,color .15s ease,border-color .15s ease,transform .1s ease;
+  transition:background-color .15s ease,color .15s ease,border-color .15s ease,transform .15s cubic-bezier(.34,1.56,.64,1);
 }
 .share-btn:hover{background:var(--bg3);color:var(--t0)}
-.share-btn:active{transform:scale(.98);transition:transform 0s}
+.share-btn:active{transform:scale(.96);transition:transform 0s}
 .share-btn.copied{background:var(--green-bg);border-color:var(--green-bd);color:var(--green)}
 
 @media(max-width:380px){
@@ -979,8 +981,11 @@ const BillRow=memo(({id,label,denom,rollCount,inputMode,value,onManualInput,onSt
   const minusCb=useCallback(()=>onStep(id,-1,denom),[id,denom,onStep]);
   const plus=useHoldRepeat(plusCb);
   const minus=useHoldRepeat(minusCb);
+
   return(
-    <div className={`denom-row${has?' has-value':''}`}>
+    <div
+      className={`denom-row${has?' has-value':''}`}
+    >
       <span className={`denom-label${has?' active':''}`}>{label}</span>
       <div className="denom-input-wrap">
         {inputMode==='value'&&<span className="denom-prefix">$</span>}
@@ -1613,18 +1618,6 @@ function App(){
       .catch(()=>{});
   },[]);
 
-  // keyboard offset
-  const [fo,setFo]=useState(0);
-  useEffect(()=>{
-    const vv=window.visualViewport;if(!vv)return;
-    let raf=null;
-    const up=()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>setFo(Math.max(0,window.innerHeight-vv.height-vv.offsetTop)));};
-    vv.addEventListener('resize',up);
-    vv.addEventListener('scroll',up);
-    up();
-    return()=>{vv.removeEventListener('resize',up);vv.removeEventListener('scroll',up);cancelAnimationFrame(raf);};
-  },[]);
-
   // Theme is pure DOM state — no React re-render needed on toggle
   const thmTm=useRef(null);
   const [theme,setTheme]=useState(()=>document.documentElement.getAttribute('data-theme')||lsGet(LS_THEME,'dark'));
@@ -1656,6 +1649,16 @@ function App(){
   const [showRecord,setShowRecord]=useState(null);
   const [hintDone,setHintDone]=useState(()=>lsGet(LS_HINT,false));
   const dismissHint=useCallback(()=>{setHintDone(true);lsSet(LS_HINT,true);},[]);
+
+  // Hide footer when any input is focused (keyboard is up) — avoids iOS visualViewport timing issues
+  const [anyFocused,setAnyFocused]=useState(false);
+  useEffect(()=>{
+    const onFocus=e=>{if(e.target.tagName==='INPUT')setAnyFocused(true);};
+    const onBlur=e=>{if(e.target.tagName==='INPUT')setAnyFocused(false);};
+    document.addEventListener('focusin',onFocus);
+    document.addEventListener('focusout',onBlur);
+    return()=>{document.removeEventListener('focusin',onFocus);document.removeEventListener('focusout',onBlur);};
+  },[]);
 
   const TARGET=Math.max(0,Number(targetInput)||0);
   const totalBillsCents=BILL_DENOMS.reduce((s,d)=>s+toCents(rowValue(cash[String(d)],d,billsMode)),0);
@@ -1752,7 +1755,7 @@ function App(){
               </div>
             </CollapsibleSection>
 
-            <div className="hold-hint">Tap input to type · hold +/− to count fast</div>
+            <div className="hold-hint">Tap input to type · hold +/- to repeat</div>
           </div>
         ):(
           <div className="page-enter" style={{display:'flex',flexDirection:'column',gap:'12px',paddingBottom:'16px'}}>
@@ -1876,7 +1879,7 @@ function App(){
       </main>
 
       {page===1&&(
-        <div className="sticky-footer" style={{bottom:`${fo}px`}}>
+        <div className={`sticky-footer${anyFocused?' keyboard-up':''}`}>
           {/* Total + target meta on top row */}
           <div className="footer-top-row">
             <div>
