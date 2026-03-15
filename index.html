@@ -979,57 +979,8 @@ const BillRow=memo(({id,label,denom,rollCount,inputMode,value,onManualInput,onSt
   const minusCb=useCallback(()=>onStep(id,-1,denom),[id,denom,onStep]);
   const plus=useHoldRepeat(plusCb);
   const minus=useHoldRepeat(minusCb);
-  const swipeRef=useRef({x:0,y:0,active:false});
-  const swipeXRef=useRef(0);
-  const [swipeX,setSwipeX]=useState(0);
-  const [swiping,setSwiping]=useState(false);
-  useEffect(()=>{if(!has){swipeXRef.current=0;setSwipeX(0);setSwiping(false);}},[has]);
-
-  const onRowPointerDown=e=>{
-    if(!has||e.pointerType==='mouse') return;
-    if(e.target.closest('input,button')) return;
-    swipeRef.current={x:e.clientX,y:e.clientY,active:true};
-    setSwiping(false);
-    e.currentTarget.setPointerCapture?.(e.pointerId);
-  };
-  const onRowPointerMove=e=>{
-    if(!swipeRef.current.active) return;
-    const dx=e.clientX-swipeRef.current.x;
-    const dy=e.clientY-swipeRef.current.y;
-    if(!swiping){
-      if(dx<-10&&Math.abs(dx)>Math.abs(dy)*1.2){
-        setSwiping(true);
-      }else if(Math.abs(dy)>12){
-        swipeRef.current.active=false;
-        return;
-      }else{
-        return;
-      }
-    }
-    if(dx<0){
-      e.preventDefault();
-      const next=Math.max(-96,dx);
-      swipeXRef.current=next;
-      setSwipeX(next);
-    }
-  };
-  const finishSwipe=()=>{
-    if(swipeXRef.current<-72){haptic([8]);onClear?.(id);}
-    swipeXRef.current=0;
-    setSwipeX(0);
-    setSwiping(false);
-    swipeRef.current.active=false;
-  };
   return(
-    <div
-      className={`denom-row${has?' has-value':''}`}
-      style={{transform:`translateX(${swipeX}px)`,transition:swiping?'none':'transform .18s ease'}}
-      onPointerDown={onRowPointerDown}
-      onPointerMove={onRowPointerMove}
-      onPointerUp={finishSwipe}
-      onPointerCancel={finishSwipe}
-      onPointerLeave={finishSwipe}
-    >
+    <div className={`denom-row${has?' has-value':''}`}>
       <span className={`denom-label${has?' active':''}`}>{label}</span>
       <div className="denom-input-wrap">
         {inputMode==='value'&&<span className="denom-prefix">$</span>}
@@ -1801,7 +1752,7 @@ function App(){
               </div>
             </CollapsibleSection>
 
-            <div className="hold-hint">Tap input to type · hold +/- to repeat · swipe left to clear</div>
+            <div className="hold-hint">Tap input to type · hold +/− to count fast</div>
           </div>
         ):(
           <div className="page-enter" style={{display:'flex',flexDirection:'column',gap:'12px',paddingBottom:'16px'}}>
@@ -1925,7 +1876,7 @@ function App(){
       </main>
 
       {page===1&&(
-        <div className="sticky-footer" style={{transform:`translateY(-${fo}px)`}}>
+        <div className="sticky-footer" style={{bottom:`${fo}px`}}>
           {/* Total + target meta on top row */}
           <div className="footer-top-row">
             <div>
