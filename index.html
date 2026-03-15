@@ -100,9 +100,10 @@ input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-ou
 input[type="number"]{-moz-appearance:textfield}
 body,*{-ms-overflow-style:none;scrollbar-width:none}
 ::-webkit-scrollbar{display:none}
-body{font-family:var(--font);color:var(--t0);overscroll-behavior:none;-webkit-tap-highlight-color:transparent;min-height:100vh;min-height:100dvh;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{font-family:var(--font);color:var(--t0);overscroll-behavior:none;-webkit-tap-highlight-color:transparent;min-height:100vh;min-height:100dvh;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;user-select:none;-webkit-user-select:none}
 button,input{-webkit-tap-highlight-color:transparent}
-button{touch-action:manipulation}
+button{touch-action:manipulation;user-select:none;-webkit-user-select:none}
+input,textarea{user-select:text;-webkit-user-select:text}
 button:focus,input:focus,:focus-visible{outline:none}
 svg{display:inline-block;vertical-align:middle}
 
@@ -142,12 +143,11 @@ svg{display:inline-block;vertical-align:middle}
 /* ModeToggle sits inside the header – stop its clicks from bubbling to the collapse toggle */
 .mode-toggle-wrap{position:relative;z-index:2}
 .section-body-wrap{
-  display:grid;
-  grid-template-rows:1fr;
-  transition:grid-template-rows .28s cubic-bezier(.4,0,.2,1),opacity .22s ease;
+  overflow:hidden;
+  transition:max-height .28s cubic-bezier(.4,0,.2,1),opacity .22s ease;
 }
-.section-body-wrap.closed{grid-template-rows:0fr;opacity:0}
-.section-body-inner{overflow:hidden}
+.section-body-wrap.closed{opacity:0}
+.section-body-inner{}
 
 /* ─── MODE TOGGLE — animated sliding pill ───────────────────────────────────── */
 .mode-toggle{
@@ -382,6 +382,21 @@ html[data-theme="light"] .sheet-backdrop{background:rgba(0,0,0,.3)}
 .sheet-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--t1)}
 .sheet-body{overflow-y:auto;flex:1;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 
+/* ─── HISTORY SEARCH / FILTER ──────────────────────────────────────────────── */
+.history-search-wrap{padding:10px 16px 0;display:flex;flex-direction:column;gap:8px;border-bottom:1px solid var(--bd-s)}
+.history-search-row{position:relative;display:flex;align-items:center}
+.history-search-icon{position:absolute;left:10px;color:var(--t2);pointer-events:none;flex-shrink:0}
+.history-search-input{width:100%;background:var(--bg0);border:1px solid var(--bd);border-radius:var(--r-sm);height:38px;padding:0 32px 0 34px;font-size:14px;font-weight:500;color:var(--t0);user-select:text;-webkit-user-select:text}
+.history-search-input:focus{border-color:var(--brand-bd);background:var(--bg1);box-shadow:0 0 0 2px var(--brand-bg)}
+.history-search-input::placeholder{color:var(--t2)}
+.history-search-clear{position:absolute;right:6px;width:24px;height:24px;border:none;background:var(--bg3);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t1)}
+.history-search-clear:active{transform:scale(.88);transition:transform 0s}
+.history-filter-chips{display:flex;gap:6px;padding-bottom:10px;overflow-x:auto}
+.history-filter-chip{flex-shrink:0;font-size:11px;font-weight:700;letter-spacing:.3px;border-radius:20px;padding:4px 12px;cursor:pointer;border:1px solid var(--bd);background:var(--bg2);color:var(--t1);white-space:nowrap;transition:background-color .12s,color .12s,border-color .12s}
+.history-filter-chip.active{background:var(--brand);border-color:transparent;color:#fff}
+.history-filter-chip:active{transform:scale(.93);transition:transform 0s}
+.history-results-count{font-size:11px;font-weight:600;color:var(--t2);padding:8px 20px 0;text-transform:uppercase;letter-spacing:.5px}
+
 /* ─── HISTORY ───────────────────────────────────────────────────────────────── */
 .history-entry{padding:16px 20px;border-bottom:1px solid var(--bd-s)}
 .history-entry.record{background:linear-gradient(90deg,rgba(210,153,34,.06) 0%,transparent 100%);border-left:3px solid var(--yt)}
@@ -405,7 +420,7 @@ html[data-theme="light"] .sheet-backdrop{background:rgba(0,0,0,.3)}
 .trend-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--t2)}
 .trend-value{font-size:17px;font-weight:800;color:var(--t0);margin:4px 0 8px;font-variant-numeric:tabular-nums;letter-spacing:-.3px}
 .trend-value.up{color:var(--green)}.trend-value.down{color:var(--red)}
-.sparkline{width:100%;height:48px;display:block;overflow:visible}
+.sparkline{width:100%;height:auto;display:block;overflow:visible}
 .sparkline-dot{transform-box:fill-box;transform-origin:center;animation:dotPulse 2.4s ease-in-out infinite}
 
 /* ─── SETTINGS ──────────────────────────────────────────────────────────────── */
@@ -541,7 +556,7 @@ html[data-theme="light"] .sheet-backdrop{background:rgba(0,0,0,.3)}
 .bump{animation:bump .18s ease-out}
 @keyframes dotPulse{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.35);opacity:1}}
 @keyframes spotGlow{0%,100%{opacity:.7}50%{opacity:1}}
-#confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:999}
+#confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:999;display:none}
 
 /* ─── SHARE / COPY REPORT BUTTON ────────────────────────────────────────────── */
 .share-btn{
@@ -648,6 +663,7 @@ const PATH={
   share:'M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13',
   copy:'M8 17.929H6c-1.105 0-2-.912-2-2.036V5.036C4 3.91 4.895 3 6 3h8c1.105 0 2 .911 2 2.036v1.866m-6 .17h8c1.105 0 2 .91 2 2.035v10.857C20 21.09 19.105 22 18 22h-8c-1.105 0-2-.911-2-2.036V9.107c0-1.124.895-2.036 2-2.036z',
   changelog:'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM14 2v6h6M16 13H8M16 17H8M10 9H8',
+  search:'M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z',
 };
 
 const BILL_DENOMS=[100,50,20,10,5,1];
@@ -756,6 +772,7 @@ function formatTime(ts){return new Date(ts).toLocaleString(undefined,{month:'sho
 function launchConfetti(){
   if(REDUCE_MOTION) return;
   const canvas=document.getElementById('confetti-canvas');if(!canvas)return;
+  canvas.style.display='block';
   canvas.width=window.innerWidth;canvas.height=window.innerHeight;
   const ctx=canvas.getContext('2d');
   const COLS=['#3fb950','#58a6ff','#e3b341','#f78166','#bc8cff','#ffa657'];
@@ -764,9 +781,10 @@ function launchConfetti(){
   const tick=()=>{
     ctx.clearRect(0,0,canvas.width,canvas.height);let alive=0;
     for(const p of ps){p.x+=p.vx;p.y+=p.vy;p.vy+=.08;p.rot+=p.rv;p.alpha-=.008;if(p.y<canvas.height&&p.alpha>0){alive++;ctx.save();ctx.globalAlpha=Math.max(0,p.alpha);ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);ctx.fillStyle=p.color;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore();}}
-    if(alive>0)raf=requestAnimationFrame(tick);else ctx.clearRect(0,0,canvas.width,canvas.height);
+    if(alive>0)raf=requestAnimationFrame(tick);
+    else{ctx.clearRect(0,0,canvas.width,canvas.height);canvas.style.display='none';}
   };
-  tick();setTimeout(()=>{cancelAnimationFrame(raf);ctx.clearRect(0,0,canvas.width,canvas.height);},5000);
+  tick();setTimeout(()=>{cancelAnimationFrame(raf);ctx.clearRect(0,0,canvas.width,canvas.height);canvas.style.display='none';},5000);
 }
 
 const haptic=p=>{try{navigator.vibrate?.(p);}catch{}};
@@ -797,14 +815,19 @@ const ModeToggle=({mode,onChange})=>{
     setPill({left:bRect.left-tRect.left,width:bRect.width});
   },[mode]);
 
+  const handleTrackClick=e=>{
+    e.stopPropagation();
+    const next=MODES.find(m=>m!==mode);
+    haptic([5]);onChange(next);
+  };
+
   return(
     <div className="mode-toggle-wrap" onClick={e=>e.stopPropagation()}>
-      <div className="mode-toggle" ref={trackRef}>
+      <div className="mode-toggle" ref={trackRef} onClick={handleTrackClick}>
         <div className="mode-toggle-pill" style={{left:`${pill.left}px`,width:`${pill.width}px`}}/>
         {MODES.map((m,i)=>(
           <button key={m} ref={el=>btnRefs.current[i]=el}
-            className={`mode-btn${mode===m?' active':''}`}
-            onClick={e=>{e.stopPropagation();haptic([5]);onChange(m);}}>
+            className={`mode-btn${mode===m?' active':''}`}>
             {LABELS[i]}
           </button>
         ))}
@@ -956,6 +979,17 @@ function useToast(){
 function CollapsibleSection({id,label,badge,mode,onModeChange,children,defaultOpen=true}){
   const [open,setOpen]=useState(defaultOpen);
   const [pressing,setPressing]=useState(false);
+  const innerRef=useRef(null);
+  const [ht,setHt]=useState(0);
+
+  useEffect(()=>{
+    const el=innerRef.current;
+    if(!el) return;
+    const ro=new ResizeObserver(()=>setHt(el.scrollHeight));
+    ro.observe(el);
+    setHt(el.scrollHeight);
+    return()=>ro.disconnect();
+  },[]);
 
   const onPointerDown=e=>{
     if(!e.target.closest('button,input,a,[role="button"]')) setPressing(true);
@@ -988,9 +1022,8 @@ function CollapsibleSection({id,label,badge,mode,onModeChange,children,defaultOp
           <Icon path={PATH.chevD} size={16} className={`sec-chev${open?' open':''}`}/>
         </div>
       </div>
-      {/* CSS grid-rows trick: no JS height measurement, no ResizeObserver */}
-      <div className={`section-body-wrap${open?'':' closed'}`}>
-        <div className="section-body-inner">
+      <div className={`section-body-wrap${open?'':' closed'}`} style={{maxHeight:open?`${ht}px`:'0'}}>
+        <div className="section-body-inner" ref={innerRef}>
           {children}
         </div>
       </div>
@@ -1555,7 +1588,7 @@ function Sparkline({data,stroke=['var(--brand)','var(--green)'],fill=['rgba(88,1
   const last=pts[pts.length-1];
   const fillPath=`${linePath} L${last[0]},${H} L${pts[0][0]},${H} Z`;
   return(
-    <svg className="sparkline" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" style={{color:stroke[1],overflow:'visible'}}>
+    <svg className="sparkline" viewBox={`0 0 ${W} ${H}`} style={{color:stroke[1],overflow:'visible'}}>
       <defs>
         <linearGradient id={strokeId} x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
           <stop offset="0%" stopColor={stroke[0]}/>
@@ -1580,21 +1613,46 @@ function Sparkline({data,stroke=['var(--brand)','var(--green)'],fill=['rgba(88,1
   );
 }
 
+const HISTORY_FILTERS=[
+  {id:'all',label:'All'},
+  {id:'over',label:'Over target'},
+  {id:'under',label:'Under target'},
+  {id:'record',label:'Record'},
+];
+
 function HistoryPanel({onClose,onRecordCleared}){
   const [history,setHistory]=useState(loadHistory);
   const [showCC,setShowCC]=useState(false);
+  const [query,setQuery]=useState('');
+  const [activeFilter,setActiveFilter]=useState('all');
+  const searchRef=useRef(null);
   const record=lsGet(LS_RECORD,0);
   const clearHistory=()=>{haptic([8,60,15]);localStorage.removeItem(LS_HISTORY);setHistory([]);setShowCC(false);onRecordCleared?.();};
   const ordered=history.slice().reverse();
   const recent=ordered.slice(-14);
   const drops=recent.map(e=>e.dropped);
-  const deltas=recent.map(e=>e.totalCash-e.target);
   const avgDrop=drops.length?drops.reduce((s,v)=>s+v,0)/drops.length:0;
-  const avgDelta=deltas.length?deltas.reduce((s,v)=>s+v,0)/deltas.length:0;
   const dropStroke=['#2ea043','#58a6ff'];
   const dropFill=['rgba(46,160,67,.25)','rgba(46,160,67,0)'];
-  const deltaStroke=avgDelta>=0?['#3fb950','#58a6ff']:['#f85149','#d29922'];
-  const deltaFill=avgDelta>=0?['rgba(63,185,80,.25)','rgba(63,185,80,0)']:['rgba(248,81,73,.25)','rgba(248,81,73,0)'];
+
+  // Filter + search
+  const filtered=ordered.filter(e=>{
+    if(activeFilter==='over'&&e.totalCash<(e.target||0)) return false;
+    if(activeFilter==='under'&&e.totalCash>=(e.target||0)) return false;
+    if(activeFilter==='record'&&e.dropped!==record) return false;
+    if(query.trim()){
+      const q=query.trim().toLowerCase();
+      const date=formatTime(e.ts).toLowerCase();
+      const counted=`$${e.totalCash.toFixed(2)}`;
+      const dropped=`$${e.dropped.toFixed(2)}`;
+      const target=`$${(e.target||0).toFixed(2)}`;
+      const bills=(e.dropDetails||[]).map(d=>`${d.count} ${d.label}`).join(' ').toLowerCase();
+      if(![date,counted,dropped,target,bills].some(s=>s.includes(q))) return false;
+    }
+    return true;
+  });
+
+  const isFiltering=query.trim()!==''||activeFilter!=='all';
 
   return(
     <>
@@ -1611,13 +1669,47 @@ function HistoryPanel({onClose,onRecordCleared}){
             </div>
             <div className="sheet-body">
               {history.length>0&&(
-                <div className="history-trends" style={{gridTemplateColumns:'1fr'}}>
-                  <div className="trend-card">
-                    <div className="trend-title">Avg drop</div>
-                    <div className="trend-value">${avgDrop.toFixed(2)}</div>
-                    <Sparkline data={drops} stroke={dropStroke} fill={dropFill}/>
+                <>
+                  <div className="history-trends" style={{gridTemplateColumns:'1fr'}}>
+                    <div className="trend-card">
+                      <div className="trend-title">Avg drop</div>
+                      <div className="trend-value">${avgDrop.toFixed(2)}</div>
+                      <Sparkline data={drops} stroke={dropStroke} fill={dropFill}/>
+                    </div>
                   </div>
-                </div>
+                  <div className="history-search-wrap">
+                    <div className="history-search-row">
+                      <span className="history-search-icon"><Icon path={PATH.search} size={15}/></span>
+                      <input
+                        ref={searchRef}
+                        className="history-search-input"
+                        type="text"
+                        placeholder="Search by date, amount, bills…"
+                        value={query}
+                        onChange={e=>setQuery(e.target.value)}
+                      />
+                      {query&&(
+                        <button className="history-search-clear" onClick={()=>{setQuery('');searchRef.current?.focus();}}>
+                          <Icon path={PATH.closeX} size={11}/>
+                        </button>
+                      )}
+                    </div>
+                    <div className="history-filter-chips">
+                      {HISTORY_FILTERS.map(f=>(
+                        <button key={f.id}
+                          className={`history-filter-chip${activeFilter===f.id?' active':''}`}
+                          onClick={()=>{haptic([4]);setActiveFilter(f.id);}}>
+                          {f.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  {isFiltering&&(
+                    <div className="history-results-count">
+                      {filtered.length} result{filtered.length!==1?'s':''}
+                    </div>
+                  )}
+                </>
               )}
               {history.length===0?(
                 <div className="history-empty">
@@ -1625,7 +1717,13 @@ function HistoryPanel({onClose,onRecordCleared}){
                   <div style={{fontWeight:700,fontSize:'15px',marginBottom:'6px'}}>No drops yet</div>
                   <div style={{fontSize:'13px',opacity:.6}}>Completed counts will appear here</div>
                 </div>
-              ):history.map((e,i)=>(
+              ):filtered.length===0?(
+                <div className="history-empty">
+                  <div className="history-empty-icon"><Icon path={PATH.search} size={22}/></div>
+                  <div style={{fontWeight:700,fontSize:'15px',marginBottom:'6px'}}>No results</div>
+                  <div style={{fontSize:'13px',opacity:.6}}>Try a different search or filter</div>
+                </div>
+              ):filtered.map((e,i)=>(
                 <div key={i} className={`history-entry${e.dropped===record&&record>0?' record':''}`}>
                   <div className="history-meta">
                     <span className="history-time">{formatTime(e.ts)}</span>
