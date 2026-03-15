@@ -3,22 +3,6 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<script>
-// ── Dev redirect — fires before CSS/fonts/React load ─────────────────────────
-// Visit /?dev to load dev.html. Extra params and hash are preserved.
-// e.g. /?dev  →  /dev.html
-//      /?dev&foo=bar  →  /dev.html?foo=bar
-(function(){
-  try{
-    const p=new URLSearchParams(location.search);
-    if(p.has('dev')){
-      p.delete('dev');
-      const qs=p.toString();
-      location.replace('/dev.html'+(qs?'?'+qs:'')+(location.hash||''));
-    }
-  }catch{}
-})();
-</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -27,6 +11,20 @@
 <meta name="theme-color" content="#0d1117">
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%233d6b9e'/><path d='M50 20 C50 20 42 14 34 18 C26 22 24 32 28 40 C32 48 50 72 50 72 C50 72 68 48 72 40 C76 32 74 22 66 18 C58 14 50 20 50 20 Z' fill='white'/><path d='M50 20 C50 20 54 12 60 13' stroke='white' stroke-width='3' fill='none' stroke-linecap='round'/></svg>">
 <title>Apple-Counter Drop</title>
+<script>
+// ── Dev redirect — fires before CSS/fonts/React load ─────────────────────────
+// Visit /?dev to load dev.html. Extra params and hash are preserved.
+(function(){
+  try{
+    var p=new URLSearchParams(location.search);
+    if(p.has('dev')){
+      p.delete('dev');
+      var qs=p.toString();
+      location.replace('/dev.html'+(qs?'?'+qs:'')+(location.hash||''));
+    }
+  }catch(e){}
+})();
+</script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
