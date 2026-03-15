@@ -62,8 +62,7 @@ html.thm .sheet,
 html.thm .trend-card,
 html.thm .breakdown-btn,
 html.thm .share-btn,
-html.thm .target-input,
-html.thm body::before{
+html.thm .target-input{
   transition:
     background-color var(--td) ease,
     border-color     var(--td) ease,
@@ -108,8 +107,11 @@ button:focus,input:focus,:focus-visible{outline:none}
 svg{display:inline-block;vertical-align:middle}
 
 /* ─── SKELETON (replaces boot splash) ──────────────────────────────────────── */
-.sk{background:linear-gradient(90deg,var(--bg2) 25%,var(--bg3) 50%,var(--bg2) 75%);background-size:200% 100%;animation:skShim 1.4s infinite;border-radius:var(--r-md)}
-@keyframes skShim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.sk{background:#21262d;border-radius:var(--r-md);position:relative;overflow:hidden}
+.sk::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.07) 50%,transparent 100%);animation:skShim 1.4s linear infinite}
+@keyframes skShim{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.sk-row-inline{height:56px;border-radius:8px;background:#21262d;position:relative;overflow:hidden}
+.sk-row-inline::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.07) 50%,transparent 100%);animation:skShim 1.4s linear infinite}
 .sk-hd{height:44px;margin-bottom:8px}
 .sk-row{height:54px;margin-bottom:4px}
 /* Skeleton fades out when real content takes over */
@@ -118,7 +120,7 @@ svg{display:inline-block;vertical-align:middle}
 
 /* ─── HEADER ────────────────────────────────────────────────────────────────── */
 .gh-header{background:var(--bg1);border-bottom:1px solid var(--bd);padding:12px 16px;padding-top:calc(12px + env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;position:fixed;top:0;left:0;right:0;z-index:30;will-change:transform;transform:translateZ(0)}
-body::before{content:'';position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top);background:var(--bg1);z-index:31}
+/* safe-area notch covered by the header's own padding-top — no pseudo needed */
 .gh-header-brand{display:flex;align-items:center;gap:10px;min-width:0}
 .gh-logo{width:34px;height:34px;background:var(--brand);border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
 .gh-header-title{font-size:16px;font-weight:700;color:var(--t0);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -139,8 +141,13 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:env(safe-area
 .sec-chev.open{transform:rotate(180deg)}
 /* ModeToggle sits inside the header – stop its clicks from bubbling to the collapse toggle */
 .mode-toggle-wrap{position:relative;z-index:2}
-.section-body-wrap{overflow:hidden;transition:max-height .32s cubic-bezier(.4,0,.2,1),opacity .26s ease}
-.section-body-wrap.closed{opacity:0}
+.section-body-wrap{
+  display:grid;
+  grid-template-rows:1fr;
+  transition:grid-template-rows .28s cubic-bezier(.4,0,.2,1),opacity .22s ease;
+}
+.section-body-wrap.closed{grid-template-rows:0fr;opacity:0}
+.section-body-inner{overflow:hidden}
 
 /* ─── MODE TOGGLE — animated sliding pill ───────────────────────────────────── */
 .mode-toggle{
@@ -206,8 +213,9 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:env(safe-area
 .step-btn:active{transform:scale(.82);background:var(--bg3);box-shadow:none;transition:transform 0s,box-shadow 0s,background-color 0s}
 .step-btn.plus.active{border-color:var(--green-bd);color:var(--green)}
 .step-btn.repeating{box-shadow:0 0 0 2px var(--brand-bd)}
-.roll-btn{height:48px;min-width:46px;max-width:58px;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;color:var(--brand);padding:0 6px;touch-action:manipulation;transition:background-color .15s ease,transform .15s cubic-bezier(.34,1.56,.64,1),box-shadow .15s ease}
+.roll-btn{height:48px;min-width:46px;max-width:58px;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;color:var(--brand);padding:0 6px;touch-action:manipulation;transition:background-color .15s ease,color .15s ease,border-color .15s ease,transform .15s cubic-bezier(.34,1.56,.64,1),box-shadow .15s ease}
 .roll-btn:active{transform:scale(.84);box-shadow:none;transition:transform 0s,box-shadow 0s}
+.roll-btn.roll-holding{background:rgba(248,81,73,.12);border-color:rgba(248,81,73,.4);color:var(--red);transform:scale(.92)}
 .roll-btn-icons{display:flex;align-items:center;gap:2px}
 .roll-btn-label{font-size:9px;font-weight:800;opacity:.75;letter-spacing:.3px;white-space:nowrap}
 @media(max-width:380px){.roll-btn-label{display:none}}
@@ -244,14 +252,33 @@ html[data-theme="light"] .btn-calc:hover{background:#1a7f37}
 .target-status{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;font-variant-numeric:tabular-nums}
 .target-status.over{color:var(--green)}.target-status.under{color:var(--t2)}
 .progress-wrap{position:relative}
-.progress-track{height:8px;background:var(--bg3);border-radius:99px;overflow:hidden}
-.progress-fill{height:100%;border-radius:99px;background:var(--brand);transition:width .6s cubic-bezier(.4,0,.2,1),background .3s ease}
+.progress-track{height:22px;background:var(--bg3);border-radius:99px;overflow:hidden;position:relative}
+.progress-fill{
+  position:absolute;inset:0;right:auto;
+  border-radius:99px;background:var(--brand);
+  transition:width .6s cubic-bezier(.4,0,.2,1),background .3s ease;
+}
 .progress-fill.over{background:var(--green)}
-/* Flag sits BELOW the bar */
-.progress-flag-wrap{position:relative;left:0;right:0;height:22px;pointer-events:none;margin-top:4px}
-.progress-flag{position:absolute;top:0;display:flex;flex-direction:column;align-items:center;transform:translateX(-50%)}
-.progress-flag-pole{width:1.5px;height:6px;background:var(--yt);opacity:.7}
-.progress-flag-tag{font-size:9px;font-weight:800;background:var(--yellow-bg);border:1px solid var(--yellow-bd);color:var(--yt);border-radius:999px;padding:2px 7px;white-space:nowrap;letter-spacing:.3px;box-shadow:0 4px 10px rgba(0,0,0,.25);animation:flagFloat 2.6s ease-in-out infinite}
+/* Best-drop pill lives INSIDE the bar track, vertically centered */
+.progress-flag{
+  position:absolute;top:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  display:flex;align-items:center;
+  z-index:2;
+}
+.progress-flag-tag{
+  font-size:10px;font-weight:800;letter-spacing:.25px;white-space:nowrap;
+  background:#d4a017;
+  color:#1a1000;
+  border-radius:99px;
+  padding:2px 8px;
+  line-height:1.4;
+  box-shadow:0 1px 4px rgba(0,0,0,.45),0 0 0 1.5px rgba(255,255,255,.12);
+  animation:flagPulse 3s ease-in-out infinite;
+}
+html[data-theme="light"] .progress-flag-tag{background:#d97706;color:#fff;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+@keyframes flagPulse{0%,100%{box-shadow:0 1px 4px rgba(0,0,0,.45),0 0 0 1.5px rgba(255,255,255,.12)}50%{box-shadow:0 1px 6px rgba(0,0,0,.55),0 0 0 2px rgba(255,220,80,.35)}}
 
 /* ─── PAGE TRANSITIONS ──────────────────────────────────────────────────────── */
 .page-enter-right{animation:pageInRight .3s cubic-bezier(.25,.46,.45,.94) both}
@@ -513,7 +540,6 @@ html[data-theme="light"] .sheet-backdrop{background:rgba(0,0,0,.3)}
 @keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.06)}100%{transform:scale(1)}}
 .bump{animation:bump .18s ease-out}
 @keyframes dotPulse{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.35);opacity:1}}
-@keyframes flagFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
 @keyframes spotGlow{0%,100%{opacity:.7}50%{opacity:1}}
 #confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:999}
 
@@ -541,7 +567,7 @@ html[data-theme="light"] .sheet-backdrop{background:rgba(0,0,0,.3)}
   .history-trends{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion: reduce){
-  *,*::before,*::after{
+  *:not(.sk-row-inline),*:not(.sk-row-inline)::before,*:not(.sk-row-inline)::after{
     animation-duration:0.01ms !important;
     animation-iteration-count:1 !important;
     transition-duration:0.01ms !important;
@@ -553,7 +579,33 @@ html[data-theme="light"] .sheet-backdrop{background:rgba(0,0,0,.3)}
 </head>
 <body>
 <canvas id="confetti-canvas"></canvas>
-<div id="root"></div>
+<div id="root">
+  <!-- Pre-React skeleton: visible immediately, React replaces it on mount -->
+  <div id="pre-sk" style="max-width:480px;margin:0 auto;padding:14px 14px 280px;padding-top:calc(58px + env(safe-area-inset-top) + 14px);display:flex;flex-direction:column;gap:12px">
+    <div style="background:#161b22;border:1px solid #30363d;border-radius:12px;overflow:hidden">
+      <div style="background:#21262d;border-bottom:1px solid #30363d;padding:11px 14px;height:44px"></div>
+      <div style="padding:8px;display:flex;flex-direction:column;gap:4px">
+        <div class="sk-row-inline" ></div>
+        <div class="sk-row-inline" ></div>
+        <div class="sk-row-inline" ></div>
+        <div class="sk-row-inline" ></div>
+        <div class="sk-row-inline" ></div>
+        <div class="sk-row-inline" ></div>
+      </div>
+    </div>
+    <div style="background:#161b22;border:1px solid #30363d;border-radius:12px;overflow:hidden">
+      <div style="background:#21262d;border-bottom:1px solid #30363d;padding:11px 14px;height:44px"></div>
+      <div style="padding:8px;display:flex;flex-direction:column;gap:4px">
+        <div class="sk-row-inline" ></div>
+        <div class="sk-row-inline" ></div>
+        <div class="sk-row-inline" ></div>
+        <div class="sk-row-inline" ></div>
+        <div class="sk-row-inline" ></div>
+        <div class="sk-row-inline" ></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 (function(){
@@ -844,18 +896,48 @@ function useSheetDismiss(triggerClose){
 }
 
 // ── Hold-to-repeat ──────────────────────────────────────────────────────────────
+// Uses touchstart/touchend so we can detect scroll intent and bail out.
+// If the finger moves >6px vertically before the hold threshold fires, we treat
+// it as a scroll and never start the repeat — no phantom presses.
 function useHoldRepeat(cb){
   const tmRef=useRef(null);
   const [rpt,setRpt]=useState(false);
-  const start=useCallback(()=>{
+  const touchStartY=useRef(null);
+  const cancelled=useRef(false);
+
+  const start=useCallback((startY)=>{
+    touchStartY.current=startY??null;
+    cancelled.current=false;
     cb();
     let delay=380;
-    const loop=()=>{cb();haptic([3]);delay=Math.max(55,delay*.72);tmRef.current=setTimeout(loop,delay);};
-    tmRef.current=setTimeout(()=>{setRpt(true);loop();},380);
+    const loop=()=>{
+      if(cancelled.current) return;
+      cb();haptic([3]);
+      delay=Math.max(55,delay*.72);
+      tmRef.current=setTimeout(loop,delay);
+    };
+    tmRef.current=setTimeout(()=>{
+      if(cancelled.current) return;
+      setRpt(true);loop();
+    },380);
   },[cb]);
-  const stop=useCallback(()=>{clearTimeout(tmRef.current);setRpt(false);},[]);
+
+  const cancel=useCallback(()=>{
+    cancelled.current=true;
+    clearTimeout(tmRef.current);
+    setRpt(false);
+    touchStartY.current=null;
+  },[]);
+
+  // Expose a touchmove check — if Y movement > 8px, cancel
+  const onTouchMove=useCallback((e)=>{
+    if(touchStartY.current==null) return;
+    const dy=Math.abs(e.touches[0].clientY-touchStartY.current);
+    if(dy>8) cancel();
+  },[cancel]);
+
   useEffect(()=>()=>clearTimeout(tmRef.current),[]);
-  return{repeating:rpt,start,stop};
+  return{repeating:rpt,start,stop:cancel,onTouchMove};
 }
 
 function useToast(){
@@ -874,28 +956,12 @@ function useToast(){
 function CollapsibleSection({id,label,badge,mode,onModeChange,children,defaultOpen=true}){
   const [open,setOpen]=useState(defaultOpen);
   const [pressing,setPressing]=useState(false);
-  const innerRef=useRef(null);
-  const [ht,setHt]=useState('none');
-
-  useEffect(()=>{
-    const el=innerRef.current;
-    if(!el) return;
-    const ro=new ResizeObserver(()=>setHt(el.scrollHeight));
-    ro.observe(el);
-    setHt(el.scrollHeight);
-    return()=>ro.disconnect();
-  },[]);
 
   const onPointerDown=e=>{
-    // Only show pressed state when touching the header background itself,
-    // not any interactive child (buttons inside mode toggle, etc.)
-    if(!e.target.closest('button,input,a,[role="button"]')){
-      setPressing(true);
-    }
+    if(!e.target.closest('button,input,a,[role="button"]')) setPressing(true);
   };
   const clearPress=()=>setPressing(false);
   const onDivClick=e=>{
-    // Ignore clicks that originated from child interactive elements
     if(e.target.closest('button,input,a')||e.target.closest('.mode-toggle-wrap')) return;
     haptic([4]);
     setOpen(v=>!v);
@@ -922,9 +988,11 @@ function CollapsibleSection({id,label,badge,mode,onModeChange,children,defaultOp
           <Icon path={PATH.chevD} size={16} className={`sec-chev${open?' open':''}`}/>
         </div>
       </div>
-      <div ref={innerRef} className={`section-body-wrap${open?'':' closed'}`}
-        style={{maxHeight:open?`${ht}px`:'0'}}>
-        {children}
+      {/* CSS grid-rows trick: no JS height measurement, no ResizeObserver */}
+      <div className={`section-body-wrap${open?'':' closed'}`}>
+        <div className="section-body-inner">
+          {children}
+        </div>
       </div>
     </div>
   );
@@ -962,7 +1030,7 @@ function Skeleton(){
           </div>
           <div className="section-body">
             {Array.from({length:rows},(_,i)=>(
-              <div key={i} className="sk sk-row" style={{animationDelay:`${(ci*6+i)*.06}s`}}/>
+              <div key={i} className="sk sk-row"/>
             ))}
           </div>
         </div>
@@ -982,10 +1050,29 @@ const BillRow=memo(({id,label,denom,rollCount,inputMode,value,onManualInput,onSt
   const plus=useHoldRepeat(plusCb);
   const minus=useHoldRepeat(minusCb);
 
+  // Hold-to-remove-roll: track hold on roll button
+  const rollHoldRef=useRef(null);
+  const rollFiredRef=useRef(false);
+  const [rollHolding,setRollHolding]=useState(false);
+  const startRollHold=useCallback((e)=>{
+    haptic([6,30,10]);
+    rollFiredRef.current=false;
+    rollHoldRef.current=setTimeout(()=>{
+      haptic([8,40,8]);
+      rollFiredRef.current=true;
+      setRollHolding(false);
+      onStep(id,-rollCount,denom);
+    },600);
+    setRollHolding(true);
+  },[id,rollCount,denom,onStep]);
+  const cancelRollHold=useCallback(()=>{
+    clearTimeout(rollHoldRef.current);
+    setRollHolding(false);
+  },[]);
+  useEffect(()=>()=>clearTimeout(rollHoldRef.current),[]);
+
   return(
-    <div
-      className={`denom-row${has?' has-value':''}`}
-    >
+    <div className={`denom-row${has?' has-value':''}`}>
       <span className={`denom-label${has?' active':''}`}>{label}</span>
       <div className="denom-input-wrap">
         {inputMode==='value'&&<span className="denom-prefix">$</span>}
@@ -1000,20 +1087,42 @@ const BillRow=memo(({id,label,denom,rollCount,inputMode,value,onManualInput,onSt
       </div>
       <div className="stepper">
         {hasRoll&&(
-          <button onPointerDown={()=>haptic([6,30,10])} onClick={()=>onStep(id,rollCount,denom)}
-            className="roll-btn" title={`Add 1 roll (${rollLabel})`} aria-label={`Add 1 roll (${rollLabel})`}>
-            <div className="roll-btn-icons"><Icon path={PATH.plus} size={11}/><Icon path={PATH.coin} size={14}/></div>
-            <span className="roll-btn-label">{rollLabel}</span>
+          <button
+            className={`roll-btn${rollHolding?' roll-holding':''}`}
+            title={`Tap: +${rollLabel} · Hold: −${rollLabel}`}
+            aria-label={`Add 1 roll (${rollLabel}); hold to remove`}
+            onTouchStart={e=>{e.stopPropagation();startRollHold(e);}}
+            onTouchEnd={e=>{e.stopPropagation();if(!rollFiredRef.current)onStep(id,rollCount,denom);cancelRollHold();}}
+            onTouchMove={e=>{const dy=e.touches[0]?Math.abs(e.touches[0].clientY-(e.currentTarget._ty||e.touches[0].clientY)):0;if(dy>10)cancelRollHold();}}
+            onPointerDown={e=>{if(e.pointerType==='mouse'){haptic([6,30,10]);}}}
+            onClick={e=>{if(e.pointerType!=='touch')onStep(id,rollCount,denom);}}>
+            <div className="roll-btn-icons">
+              {rollHolding?<Icon path={PATH.minus} size={13}/>:<Icon path={PATH.plus} size={11}/>}
+              <Icon path={PATH.coin} size={14}/>
+            </div>
+            <span className="roll-btn-label">{rollHolding?'remove':rollLabel}</span>
           </button>
         )}
         <button className={`step-btn${minus.repeating?' repeating':''}`}
-          onPointerDown={e=>{e.preventDefault();haptic([5]);minus.start();}}
-          onPointerUp={minus.stop} onPointerLeave={minus.stop} onPointerCancel={minus.stop} aria-label={`Decrease ${label}`}>
+          onTouchStart={e=>{e.stopPropagation();haptic([5]);minus.start(e.touches[0].clientY);}}
+          onTouchEnd={e=>{e.stopPropagation();minus.stop();}}
+          onTouchMove={minus.onTouchMove}
+          onPointerDown={e=>{if(e.pointerType==='mouse'){haptic([5]);minus.start();}}}
+          onPointerUp={e=>{if(e.pointerType==='mouse')minus.stop();}}
+          onPointerLeave={e=>{if(e.pointerType==='mouse')minus.stop();}}
+          onPointerCancel={minus.stop}
+          aria-label={`Decrease ${label}`}>
           <Icon path={PATH.minus} size={16}/>
         </button>
         <button className={`step-btn plus${has?' active':''}${plus.repeating?' repeating':''}`}
-          onPointerDown={e=>{e.preventDefault();haptic([7]);plus.start();}}
-          onPointerUp={plus.stop} onPointerLeave={plus.stop} onPointerCancel={plus.stop} aria-label={`Increase ${label}`}>
+          onTouchStart={e=>{e.stopPropagation();haptic([7]);plus.start(e.touches[0].clientY);}}
+          onTouchEnd={e=>{e.stopPropagation();plus.stop();}}
+          onTouchMove={plus.onTouchMove}
+          onPointerDown={e=>{if(e.pointerType==='mouse'){haptic([7]);plus.start();}}}
+          onPointerUp={e=>{if(e.pointerType==='mouse')plus.stop();}}
+          onPointerLeave={e=>{if(e.pointerType==='mouse')plus.stop();}}
+          onPointerCancel={plus.stop}
+          aria-label={`Increase ${label}`}>
           <Icon path={PATH.plus} size={16}/>
         </button>
       </div>
@@ -1145,34 +1254,30 @@ function ProgressBar({over,target,totalCash,recordDrop,gamification}){
   const barMax=Math.max(totalCash,beatAt>0?beatAt*1.08:0,target||1);
   const filledPct=Math.min(100,(totalCash/barMax)*100);
   const rawFlagPct=gamification&&recordDrop>0?(beatAt/barMax)*100:null;
-  const beatLabel=`$${beatAt.toFixed(2)}`;
+  const beatLabel=`$${beatAt.toFixed(0)}`;
   const wrapRef=useRef(null);
-  // Clamp so the pill never bleeds off either edge
+  // Clamp so pill (≈62px wide) never bleeds off either edge
   const [clampedPct,setClampedPct]=useState(rawFlagPct??50);
   useEffect(()=>{
     if(rawFlagPct==null) return;
     const el=wrapRef.current;
     if(!el) return;
     const W=el.offsetWidth;
-    // Pill is ~80px wide max; keep its centre at least 40px from each edge
-    const TAG_HALF=40;
+    const TAG_HALF=34; // half of ~68px pill
     const minPct=(TAG_HALF/W)*100;
     const maxPct=((W-TAG_HALF)/W)*100;
     setClampedPct(Math.min(maxPct,Math.max(minPct,rawFlagPct)));
   },[rawFlagPct]);
   return(
     <div className="progress-wrap">
-      <div className="progress-track">
+      <div className="progress-track" ref={wrapRef}>
         <div className={`progress-fill${over?' over':''}`} style={{width:`${filledPct}%`}}/>
-      </div>
-      {rawFlagPct!=null&&(
-        <div className="progress-flag-wrap" ref={wrapRef}>
+        {rawFlagPct!=null&&(
           <div className="progress-flag" style={{left:`${clampedPct}%`}}>
-            <div className="progress-flag-pole"/>
-            <div className="progress-flag-tag">Best at {beatLabel}</div>
+            <div className="progress-flag-tag">Best {beatLabel}</div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
@@ -1506,16 +1611,11 @@ function HistoryPanel({onClose,onRecordCleared}){
             </div>
             <div className="sheet-body">
               {history.length>0&&(
-                <div className="history-trends">
+                <div className="history-trends" style={{gridTemplateColumns:'1fr'}}>
                   <div className="trend-card">
                     <div className="trend-title">Avg drop</div>
                     <div className="trend-value">${avgDrop.toFixed(2)}</div>
                     <Sparkline data={drops} stroke={dropStroke} fill={dropFill}/>
-                  </div>
-                  <div className="trend-card">
-                    <div className="trend-title">Avg over/under</div>
-                    <div className={`trend-value ${avgDelta>=0?'up':'down'}`}>{avgDelta>=0?'+':'-'}${Math.abs(avgDelta).toFixed(2)}</div>
-                    <Sparkline data={deltas} stroke={deltaStroke} fill={deltaFill}/>
                   </div>
                 </div>
               )}
@@ -1587,12 +1687,12 @@ function SettingsPanel({onClose,settings,onChange,onReplayTutorial,onShowAbout,o
 
 // ── App ──────────────────────────────────────────────────────────────────────────
 function App(){
-  // Skeleton: show briefly then swap to real content
-  // Use a short delay + rAF so the skeleton is only shown on first paint
+  // Remove the pre-React HTML skeleton as soon as we mount
   const [ready,setReady]=useState(false);
   useEffect(()=>{
-    const t=setTimeout(()=>requestAnimationFrame(()=>setReady(true)),400);
-    return()=>clearTimeout(t);
+    const el=document.getElementById('pre-sk');
+    if(el) el.remove();
+    setReady(true);
   },[]);
   const {toast,show:showToast}=useToast();
   const prevOver=useRef(false);
