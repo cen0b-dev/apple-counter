@@ -51,7 +51,7 @@ button,input{-webkit-tap-highlight-color:transparent}
 button{touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 input,textarea{user-select:text;-webkit-user-select:text}
 button:focus,input:focus,:focus-visible{outline:none}
-img,svg,.gh-logo,.install-banner-icon,.about-logo{-webkit-touch-callout:none;pointer-events:none}
+img,svg,.gh-logo,.about-logo{-webkit-touch-callout:none;pointer-events:none}
 button svg,button img{pointer-events:none}
 svg{display:inline-block;vertical-align:middle}
 
@@ -1477,62 +1477,17 @@ ReactDOM.createRoot(document.getElementById('root')).render(<ErrorBoundary><App/
 </script>
 
 <script>
-(function(){
-  if(!('serviceWorker' in navigator)) return;
-  const VER = 'ac-v4';
-  const APP_SHELL = ['/'];
-  const swCode = `
-const VER = '${VER}';
-const SHELL = ${JSON.stringify(APP_SHELL)};
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(VER).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
-});
-self.addEventListener('activate', e => {
-  e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== VER).map(k => caches.delete(k)))).then(() => self.clients.claim()));
-});
-self.addEventListener('fetch', e => {
-  const url = new URL(e.request.url);
-  if (url.hostname === 'api.github.com') { e.respondWith(fetch(e.request).catch(() => caches.match(e.request))); return; }
-  e.respondWith(caches.match(e.request).then(hit => { if (hit) return hit; return fetch(e.request).then(res => { if (res.ok) { const clone = res.clone(); caches.open(VER).then(c => c.put(e.request, clone)); } return res; }); }));
-});
-`.trim();
-  const blob = new Blob([swCode], { type: 'text/javascript' });
-  const swUrl = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(swUrl).then(reg => { reg.update().catch(() => {}); }).catch(() => {});
-})();
+// Unregister any previously installed service workers and clear their caches
+// so users always get the latest version directly from the server.
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.getRegistrations().then(function(regs){
+    regs.forEach(function(r){ r.unregister(); });
+  });
+  if(window.caches) caches.keys().then(function(keys){
+    keys.forEach(function(k){ caches.delete(k); });
+  });
+}
 </script>
 
-<style>
-.install-banner{position:fixed;bottom:0;left:0;right:0;background:var(--bg1);border-top:1px solid var(--bd);padding:14px 16px calc(14px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:12px;z-index:50;box-shadow:0 -4px 20px rgba(0,0,0,.35);transform:translateY(100%);transition:transform .38s cubic-bezier(.34,1.4,.64,1);}
-.install-banner.visible{transform:translateY(0)}
-html[data-theme="light"] .install-banner{box-shadow:0 -4px 20px rgba(31,35,40,.12)}
-.install-banner-icon{width:42px;height:42px;background:var(--brand);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;font-size:22px}
-.install-banner-text{flex:1;min-width:0}
-.install-banner-title{font-size:14px;font-weight:700;color:var(--t0);margin-bottom:2px}
-.install-banner-sub{font-size:12px;color:var(--t1)}
-.install-banner-actions{display:flex;gap:8px;flex-shrink:0}
-.install-btn-yes{height:36px;padding:0 16px;background:var(--brand);border:none;border-radius:var(--r-sm);color:#fff;font-size:13px;font-weight:700;cursor:pointer}
-.install-btn-yes:active{opacity:.85}
-.install-btn-no{height:36px;padding:0 12px;background:transparent;border:1px solid var(--bd);border-radius:var(--r-sm);color:var(--t1);font-size:13px;font-weight:600;cursor:pointer}
-.install-btn-no:active{background:var(--bg2)}
-</style>
-
-<div id="install-banner" class="install-banner" role="banner" aria-label="Install app">
-  <div class="install-banner-icon"><i class="fa-solid fa-apple-whole"></i></div>
-  <div class="install-banner-text"><div class="install-banner-title">Add to Home Screen</div><div class="install-banner-sub">Works offline · feels native</div></div>
-  <div class="install-banner-actions"><button class="install-btn-no" id="install-dismiss">Not now</button><button class="install-btn-yes" id="install-accept">Install</button></div>
-</div>
-<script>
-(function(){
-  const DISMISS_KEY = 'ac_install_dismissed';let deferredPrompt = null;
-  const banner = document.getElementById('install-banner');const btnYes = document.getElementById('install-accept');const btnNo = document.getElementById('install-dismiss');
-  function hideBanner(){banner.classList.remove('visible');}
-  function showBanner(){const dismissed = localStorage.getItem(DISMISS_KEY);if(dismissed && Date.now() - Number(dismissed) < 7 * 24 * 60 * 60 * 1000) return;if(window.matchMedia('(display-mode: standalone)').matches) return;if(window.navigator.standalone) return;setTimeout(() => banner.classList.add('visible'), 1200);}
-  window.addEventListener('beforeinstallprompt', e => { e.preventDefault();deferredPrompt = e;showBanner(); });
-  btnYes.addEventListener('click', async () => { if(!deferredPrompt) return;try{deferredPrompt.prompt();const { outcome } = await deferredPrompt.userChoice;if(outcome === 'accepted') localStorage.removeItem(DISMISS_KEY);}catch{}deferredPrompt = null;hideBanner(); });
-  btnNo.addEventListener('click', () => { localStorage.setItem(DISMISS_KEY, String(Date.now()));hideBanner(); });
-  window.addEventListener('appinstalled', hideBanner);
-})();
-</script>
 </body>
 </html>
