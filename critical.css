@@ -1,0 +1,112 @@
+/* Critical CSS — loaded blocking for skeleton + install banner */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
+
+html { background-color: #1e1e1e }
+html[data-theme="light"] { background-color: #f3f3f3 }
+body { background-color: #1e1e1e }
+html[data-theme="light"] body { background-color: #f3f3f3 }
+
+:root {
+	--brand: #ff5c5c;
+	--brand-h: #ff7575;
+	--brand-bg: rgba(255, 92, 92, .09);
+	--brand-bd: rgba(255, 92, 92, .3);
+	--bg0: #1e1e1e;
+	--bg1: #252526;
+	--bg2: #2d2d2d;
+	--bg3: #3c3c3c;
+	--bd: rgba(255, 255, 255, .06);
+	--bd-s: rgba(255, 255, 255, .04);
+	--t0: #cccccc;
+	--t1: #858585;
+	--t2: #5a5a5a;
+	--r-sm: 10px;
+	--r-md: 12px;
+	--r-lg: 16px;
+	--font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif
+}
+
+html[data-theme="light"] {
+	--bg0: #f3f3f3;
+	--bg1: #ffffff;
+	--bg2: #ececec;
+	--bg3: #d4d4d4;
+	--bd: rgba(0, 0, 0, .12);
+	--bd-s: rgba(0, 0, 0, .06);
+	--t0: #333333;
+	--t1: #616161;
+	--t2: #a0a0a0;
+	--brand: #e94b5c;
+	--brand-h: #ff5c5c;
+	--brand-bg: rgba(233, 75, 92, .08);
+	--brand-bd: rgba(233, 75, 92, .2)
+}
+
+body {
+	font-family: var(--font);
+	color: var(--t0);
+	-webkit-tap-highlight-color: transparent;
+	-webkit-font-smoothing: antialiased
+}
+
+/* Skeleton shimmer */
+.sk {
+	background: #2d2d2d;
+	border-radius: var(--r-md);
+	position: relative;
+	overflow: hidden
+}
+.sk::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.07) 50%, transparent 100%);
+	animation: skShim 1.4s linear infinite
+}
+@keyframes skShim {
+	0%   { transform: translateX(-100%) }
+	100% { transform: translateX(100%) }
+}
+
+.sk-row-inline {
+	height: 56px;
+	border-radius: 12px;
+	background: #2d2d2d;
+	position: relative;
+	overflow: hidden
+}
+.sk-row-inline::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.07) 50%, transparent 100%);
+	animation: skShim 1.4s linear infinite
+}
+
+/* Skip-to-content link */
+.skip-link {
+	position: absolute;
+	top: -100%;
+	left: 16px;
+	z-index: 100;
+	background: var(--brand);
+	color: #fff;
+	padding: 8px 16px;
+	border-radius: var(--r-sm);
+	font-size: 14px;
+	font-weight: 700;
+	text-decoration: none;
+	transition: top .2s ease
+}
+.skip-link:focus {
+	top: calc(8px + env(safe-area-inset-top));
+	outline: 2px solid #fff;
+	outline-offset: 2px
+}
+
+/* Skeleton fade-out */
+#pre-sk.sk-out, #pre-sk-footer.sk-out {
+	opacity: 0;
+	transition: opacity .35s ease-out;
+	pointer-events: none
+}
