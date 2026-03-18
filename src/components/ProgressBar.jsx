@@ -23,21 +23,21 @@ export function ProgressBar({ over, target, totalCash, recordDrop, gamification 
   }, [rawFlagPct]);
 
   return (
-    <div className="progress-wrap">
-      <div className="progress-track" ref={wrapRef}>
+    <div className="progress-wrap" ref={wrapRef}>
+      <div className="progress-track">
         <div
           className={`progress-fill${over ? ' over' : ''}`}
           style={{ width: `${filledPct}%` }}
         />
-        {rawFlagPct != null && (
-          <div
-            className="progress-flag"
-            style={{ left: `${clampedPct}%` }}
-          >
-            <div className="progress-flag-tag">Best {beatLabel}</div>
-          </div>
-        )}
       </div>
+      {rawFlagPct != null && (
+        <div
+          className="progress-flag"
+          style={{ left: `${clampedPct}%` }}
+        >
+          <div className="progress-flag-tag">Best {beatLabel}</div>
+        </div>
+      )}
     </div>
   );
 }

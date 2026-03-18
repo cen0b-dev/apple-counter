@@ -175,7 +175,7 @@ export function HistoryPanel({
                   }`}
                   onClick={handleClearClick}
                 >
-                  {clearConfirming ? 'Tap again to confirm' : 'Clear All'}
+                  Clear All
                 </button>
               )}
               <button

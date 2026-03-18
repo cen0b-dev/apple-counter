@@ -66,13 +66,10 @@ export function Sparkline({
           <stop offset="0%" stopColor={fill[0]} />
           <stop offset="100%" stopColor={fill[1]} />
         </linearGradient>
-        <filter id={glowId} x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="1.8" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
+        <radialGradient id={glowId}>
+          <stop offset="0%" stopColor={stroke[1]} stopOpacity="0.55" />
+          <stop offset="100%" stopColor={stroke[1]} stopOpacity="0" />
+        </radialGradient>
         <clipPath id={clipId}>
           <rect x="0" y="0" width={W} height={H} />
         </clipPath>
@@ -91,9 +88,14 @@ export function Sparkline({
       <circle
         cx={last[0]}
         cy={last[1]}
+        r="10"
+        fill={`url(#${glowId})`}
+      />
+      <circle
+        cx={last[0]}
+        cy={last[1]}
         r="3.2"
         fill={stroke[1]}
-        filter={`url(#${glowId})`}
         className="sparkline-dot"
       />
     </svg>

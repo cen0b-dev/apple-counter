@@ -26,6 +26,7 @@ export function useSheetDismiss(triggerClose) {
       if (rafId.current) return;
       rafId.current = requestAnimationFrame(() => {
         rafId.current = null;
+        el.style.transition = 'none';
         el.style.transform = `translate3d(0,${Math.max(0, lastDy.current)}px,0)`;
       });
     };
@@ -56,10 +57,14 @@ export function useSheetDismiss(triggerClose) {
         cancelAnimationFrame(rafId.current);
         rafId.current = null;
       }
-      el.style.transform = '';
       if (dragging.current && dy > DISMISS_THRESHOLD) {
+        el.style.transition = '';
+        el.style.transform = '';
         haptic('light');
         triggerClose();
+      } else {
+        el.style.transition = 'transform .22s cubic-bezier(.25,1,.5,1)';
+        el.style.transform = '';
       }
       startY.current = null;
       dragging.current = false;

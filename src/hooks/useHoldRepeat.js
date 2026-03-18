@@ -1,17 +1,28 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { haptic } from '../utils/haptics.js';
 
+const SCROLL_GUARD_MS = 80;
+
 export function useHoldRepeat(cb) {
   const tmRef = useRef(null);
+  const guardRef = useRef(null);
   const [rpt, setRpt] = useState(false);
   const touchStartY = useRef(null);
   const cancelled = useRef(false);
+  const fired = useRef(false);
 
   const start = useCallback(
     (startY) => {
       touchStartY.current = startY ?? null;
       cancelled.current = false;
-      cb();
+      fired.current = false;
+
+      guardRef.current = setTimeout(() => {
+        if (cancelled.current) return;
+        fired.current = true;
+        cb();
+      }, SCROLL_GUARD_MS);
+
       let delay = 380;
       const loop = () => {
         if (cancelled.current) return;
@@ -32,9 +43,21 @@ export function useHoldRepeat(cb) {
   const cancel = useCallback(() => {
     cancelled.current = true;
     clearTimeout(tmRef.current);
+    clearTimeout(guardRef.current);
     setRpt(false);
     touchStartY.current = null;
   }, []);
+
+  const stop = useCallback(() => {
+    if (!cancelled.current && !fired.current) {
+      clearTimeout(guardRef.current);
+      cb();
+    }
+    cancelled.current = true;
+    clearTimeout(tmRef.current);
+    setRpt(false);
+    touchStartY.current = null;
+  }, [cb]);
 
   const onTouchMove = useCallback(
     (e) => {
@@ -45,7 +68,10 @@ export function useHoldRepeat(cb) {
     [cancel]
   );
 
-  useEffect(() => () => clearTimeout(tmRef.current), []);
+  useEffect(() => () => {
+    clearTimeout(tmRef.current);
+    clearTimeout(guardRef.current);
+  }, []);
 
-  return { repeating: rpt, start, stop: cancel, onTouchMove };
+  return { repeating: rpt, start, stop, onTouchMove };
 }

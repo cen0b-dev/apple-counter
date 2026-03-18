@@ -106,6 +106,14 @@ body,
 	scrollbar-width: none
 }
 
+body.modal-open {
+	overflow: hidden;
+	position: fixed;
+	left: 0;
+	right: 0;
+	overscroll-behavior: none
+}
+
 ::-webkit-scrollbar {
 	display: none
 }
@@ -292,7 +300,8 @@ html[data-theme="light"] .sk {
 	backdrop-filter: blur(20px) saturate(180%);
 	border-bottom: 1px solid rgba(255, 255, 255, .06);
 	padding: 12px 16px;
-	padding-top: calc(12px + env(safe-area-inset-top));
+	margin-top: -20px;
+	padding-top: calc(32px + env(safe-area-inset-top));
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -563,6 +572,7 @@ html[data-theme="light"] .gh-header {
 	transition: background-color .18s ease, outline-color .18s ease, transform .2s cubic-bezier(.34, 1.56, .64, 1);
 	animation: denomRowIn .35s cubic-bezier(.34, 1.4, .64, 1) both;
 	-webkit-tap-highlight-color: transparent;
+	-webkit-touch-callout: none;
 	user-select: none;
 	-webkit-user-select: none
 }
@@ -1011,7 +1021,7 @@ html[data-theme="light"] .sticky-footer {
 	height: 22px;
 	background: var(--bg3);
 	border-radius: 99px;
-	overflow: visible;
+	overflow: hidden;
 	position: relative
 }
 
@@ -1081,7 +1091,8 @@ html[data-theme="light"] .progress-flag-tag {
 	border: none;
 	cursor: pointer;
 	padding: 4px 0;
-	min-height: 44px
+	min-height: 44px;
+	touch-action: manipulation
 }
 
 .back-btn:hover {
@@ -1137,6 +1148,12 @@ html[data-theme="light"] .progress-flag-tag {
 	min-height: 52px;
 	animation: prIn .45s cubic-bezier(.22, 1, .36, 1) both;
 	-webkit-tap-highlight-color: transparent;
+	user-select: none;
+	-webkit-user-select: none;
+	-webkit-touch-callout: none
+}
+
+.pull-row * {
 	user-select: none;
 	-webkit-user-select: none
 }
@@ -1463,6 +1480,7 @@ html[data-theme="light"] .progress-flag-tag {
 	padding: 8px 14px;
 	min-height: 44px;
 	cursor: pointer;
+	touch-action: manipulation;
 	transition: background-color .15s ease, color .15s ease, transform .15s cubic-bezier(.34, 1.56, .64, 1)
 }
 
@@ -1842,7 +1860,15 @@ html[data-theme="light"] .sheet {
 	border-radius: var(--r-md);
 	margin-bottom: 8px;
 	background: var(--bg1);
-	box-shadow: var(--sh-sm)
+	box-shadow: var(--sh-sm);
+	user-select: none;
+	-webkit-user-select: none;
+	-webkit-touch-callout: none
+}
+
+.history-entry * {
+	user-select: none;
+	-webkit-user-select: none
 }
 
 .history-entry.record {
@@ -1959,9 +1985,16 @@ html[data-theme="light"] .sheet {
 	color: var(--red);
 	cursor: pointer;
 	border: none;
-	background: none;
+	background: transparent;
 	min-height: 44px;
-	padding: 0 4px
+	padding: 0 4px;
+	border-radius: var(--r-sm);
+	transition: background-color .2s ease, color .2s ease
+}
+
+.clear-btn.confirming {
+	background: var(--red);
+	color: #fff
 }
 
 .history-trends {
@@ -3527,7 +3560,9 @@ html[data-theme="light"] .toast.neutral {
 
 .history-filter-row {
 	position: relative;
-	margin-top: 8px
+	margin-top: 8px;
+	display: flex;
+	justify-content: flex-end
 }
 
 .history-filter-toggle {
@@ -3739,7 +3774,7 @@ html[data-theme="light"] .toast.neutral {
 /* ─── History search ─── */
 
 .history-search-wrap {
-	padding: 0 16px 10px
+	padding: 12px 16px 10px
 }
 
 .history-search-row {

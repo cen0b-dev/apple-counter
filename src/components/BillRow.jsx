@@ -53,6 +53,7 @@ export const BillRow = memo(function BillRow({
 
   const rollHoldRef = useRef(null);
   const rollFiredRef = useRef(false);
+  const rollTouchActive = useRef(false);
   const [rollHolding, setRollHolding] = useState(false);
   const rollTouchStartY = useRef(null);
 
@@ -75,6 +76,7 @@ export const BillRow = memo(function BillRow({
     clearTimeout(rollHoldRef.current);
     setRollHolding(false);
     rollTouchStartY.current = null;
+    rollFiredRef.current = false;
   }, []);
 
   useEffect(() => () => clearTimeout(rollHoldRef.current), []);
@@ -125,6 +127,7 @@ export const BillRow = memo(function BillRow({
             aria-label={`Add 1 roll (${rollCount} coins); hold to remove`}
             onTouchStart={(e) => {
               e.stopPropagation();
+              rollTouchActive.current = true;
               startRollHold(e);
             }}
             onTouchEnd={(e) => {
@@ -142,8 +145,12 @@ export const BillRow = memo(function BillRow({
             onPointerDown={(e) => {
               if (e.pointerType === 'mouse') haptic('destruct');
             }}
-            onClick={(e) => {
-              if (e.pointerType !== 'touch') applyRollDelta(1);
+            onClick={() => {
+              if (rollTouchActive.current) {
+                rollTouchActive.current = false;
+                return;
+              }
+              applyRollDelta(1);
             }}
           >
             <div className="roll-btn-icons">
